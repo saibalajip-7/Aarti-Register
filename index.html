@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student register for Aarti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#F7F1E4;
+    --card:#FFFDF8;
+    --ink:#26241F;
+    --ink-soft:#7A7469;
+    --rule:#E3D8BF;
+    --brass:#A9762F;
+    --brass-deep:#8A5F24;
+    --brass-soft:#F1E3C4;
+    --sunday-bg:#8C3327;
+    --sunday-fg:#FBEEE7;
+    --focus:#A9762F;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    max-width:900px;
+    margin:0 auto;
+    padding:32px 20px 60px;
+  }
+
+  header.masthead{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:22px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  header.masthead h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:30px;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  header.masthead .range{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  header.masthead .header-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+  }
+
+  .settings-btn{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:60;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid var(--rule);
+    background:var(--card);
+    color:var(--ink-soft);
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 1px 4px rgba(38,36,31,0.12);
+    transition:color .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .settings-btn:hover{
+    color:var(--ink);
+    border-color:var(--brass);
+    transform:rotate(25deg);
+  }
+
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .tab{
+    font-family:'Fraunces', serif;
+    font-size:15.5px;
+    font-weight:600;
+    padding:10px 22px 9px;
+    background:var(--brass-soft);
+    color:var(--ink-soft);
+    border:none;
+    border-radius:9px 9px 0 0;
+    cursor:pointer;
+    position:relative;
+    top:2px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .tab.active{
+    background:var(--card);
+    color:var(--ink);
+    box-shadow:0 -2px 0 var(--brass) inset;
+  }
+  .tab:hover:not(.active){
+    color:var(--ink);
+    background:#EAD9AF;
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:0 10px 10px 10px;
+    padding:18px;
+    box-shadow:0 1px 2px rgba(38,36,31,0.04);
+  }
+
+  .toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+
+  button.summary-btn{
+    display:block;
+    width:100%;
+    font:inherit;
+    font-size:16px;
+    font-weight:600;
+    padding:15px 20px;
+    margin-bottom:16px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:9px;
+    cursor:pointer;
+    letter-spacing:0.01em;
+    transition:background .15s ease;
+  }
+  button.summary-btn:hover{
+    background:var(--brass-deep);
+  }
+
+  .months{
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    padding-bottom:2px;
+  }
+  .month-pill{
+    flex:none;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:500;
+    padding:6px 13px;
+    border-radius:999px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
+  }
+  .month-pill.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper);
+  }
+
+  .weeks{
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    margin-top:8px;
+  }
+  .week-pill{
+    flex:none;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:500;
+    padding:5px 11px;
+    border-radius:999px;
+    border:1px solid var(--brass);
+    background:var(--brass-soft);
+    color:var(--brass-deep);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
+  }
+  .week-pill.active{
+    background:var(--brass-deep);
+    border-color:var(--brass-deep);
+    color:var(--card);
+  }
+
+  .status{
+    font-size:12px;
+    color:var(--ink-soft);
+    min-width:70px;
+    text-align:right;
+  }
+
+  .goto-date-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:12px;
+  }
+  .goto-date{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .goto-date input[type="date"]{
+    font:inherit;
+    font-size:12.5px;
+    width:30px;
+    padding:5px 6px;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    background:var(--card);
+    color:transparent;
+    cursor:pointer;
+    -webkit-appearance:none;
+  }
+  .goto-date input[type="date"]::-webkit-datetime-edit,
+  .goto-date input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+  .goto-date input[type="date"]::-webkit-datetime-edit-text,
+  .goto-date input[type="date"]::-webkit-datetime-edit-month-field,
+  .goto-date input[type="date"]::-webkit-datetime-edit-day-field,
+  .goto-date input[type="date"]::-webkit-datetime-edit-year-field{
+    display:none;
+  }
+  .goto-date input[type="date"]::-webkit-clear-button,
+  .goto-date input[type="date"]::-webkit-inner-spin-button{
+    display:none;
+  }
+  .goto-date input[type="date"]::-webkit-calendar-picker-indicator{
+    opacity:1;
+    margin:0;
+    cursor:pointer;
+  }
+  .goto-date input[type="date"]:focus{
+    outline:none;
+    border-color:var(--focus);
+  }
+
+  .search-row{
+    margin:2px 0 14px;
+  }
+  .search-input{
+    width:100%;
+    font:inherit;
+    font-size:13.5px;
+    padding:9px 12px;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    background:var(--card);
+    color:var(--ink);
+  }
+  .search-input:focus{
+    outline:none;
+    border-color:var(--focus);
+  }
+  .search-input::placeholder{
+    color:var(--ink-soft);
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  thead th{
+    position:sticky;
+    top:0;
+    background:var(--ink);
+    color:var(--paper);
+    text-align:left;
+    padding:10px 10px;
+    font-weight:500;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  thead th:first-child{border-radius:6px 0 0 0;}
+  thead th:last-child{border-radius:0 6px 0 0;}
+
+  tbody tr{border-bottom:1px solid var(--rule);}
+  tbody td{padding:6px 10px;vertical-align:middle;}
+
+  td.date-col{white-space:nowrap;font-variant-numeric:tabular-nums;width:100px;}
+  td.day-col{white-space:nowrap;width:60px;color:var(--ink-soft);}
+
+  tr.sunday td{
+    background:var(--sunday-bg);
+    color:var(--sunday-fg);
+  }
+  tr.sunday td.day-col{color:var(--sunday-fg);font-weight:600;}
+
+  input.name-input{
+    width:100%;
+    border:1px solid transparent;
+    background:transparent;
+    font:inherit;
+    color:inherit;
+    padding:6px 7px;
+    border-radius:5px;
+  }
+  input.name-input:focus{
+    outline:none;
+    border-color:var(--focus);
+    background:var(--card);
+    color:var(--ink);
+  }
+  tr.sunday input.name-input::placeholder{color:#e5c3bb;}
+  input.name-input::placeholder{color:#BEB6A2;}
+
+  select.class-select{
+    width:100%;
+    border:1px solid var(--rule);
+    background:var(--card);
+    color:var(--ink);
+    font:inherit;
+    padding:6px 7px;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  tr.sunday select.class-select{
+    border-color:#c9897e;
+  }
+  select.class-select:focus{outline:none;border-color:var(--focus);}
+
+  .table-scroll{
+    overflow-x:auto;
+    border:1px solid var(--rule);
+    border-radius:8px;
+  }
+
+  .legend{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:12px;
+  }
+  .legend .swatch{
+    width:11px;height:11px;border-radius:3px;background:var(--sunday-bg);display:inline-block;
+  }
+
+  footer{
+    margin-top:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .footer-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  button.reset-btn, button.fill-btn, button.print-btn{
+    font:inherit;
+    font-size:12px;
+    background:none;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+    padding:7px 14px;
+    border-radius:7px;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  button.reset-btn:hover{background:var(--sunday-bg);border-color:var(--sunday-bg);color:var(--sunday-fg);}
+  button.reset-btn{
+    border-color:var(--sunday-bg);
+    color:var(--sunday-bg);
+  }
+  button.fill-btn, button.print-btn{
+    border-color:var(--brass);
+    color:var(--brass-deep);
+  }
+  button.fill-btn:hover, button.print-btn:hover{background:var(--brass-soft);}
+
+  /* Fill-range modal */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(38,36,31,0.45);
+    display:flex;align-items:center;justify-content:center;
+    z-index:50;padding:16px;
+  }
+  .modal-overlay.hidden{display:none;}
+  .modal{
+    background:var(--card);
+    border-radius:10px;
+    padding:22px 24px 18px;
+    width:100%;max-width:360px;
+    max-height:88vh;
+    overflow-y:auto;
+    box-shadow:0 14px 34px rgba(38,36,31,0.25);
+  }
+  .modal h2{
+    font-family:'Fraunces', serif;
+    font-size:18px;font-weight:600;margin:0 0 14px;
+  }
+  .modal label{
+    display:block;font-size:12px;color:var(--ink-soft);margin:10px 0 4px;
+  }
+  .modal input[type="date"], .modal input[type="text"]{
+    width:100%;font:inherit;font-size:13.5px;
+    padding:7px 9px;border:1px solid var(--rule);border-radius:6px;
+    background:var(--paper);color:var(--ink);
+  }
+  .modal input:focus{outline:none;border-color:var(--focus);}
+  .modal-actions{
+    display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap;
+  }
+  .modal-actions button{
+    font:inherit;font-size:13px;padding:7px 17px;border-radius:7px;cursor:pointer;
+  }
+  .btn-cancel{background:none;border:1px solid var(--rule);color:var(--ink-soft);}
+  .btn-apply{background:var(--ink);border:1px solid var(--ink);color:var(--paper);}
+  .modal-error{font-size:12px;color:var(--sunday-bg);margin-top:8px;min-height:14px;}
+
+  #printArea{display:none;}
+
+  @media (max-width:520px){
+    header.masthead h1{font-size:23px;}
+    .tab{padding:9px 15px 8px;font-size:14px;}
+    table{font-size:12.5px;}
+  }
+
+  @page{
+    margin:12mm;
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #printArea, #printArea *{visibility:visible;}
+    #printArea{
+      display:block;
+      position:absolute;top:0;left:0;width:100%;
+    }
+    #printArea h2{
+      font-family:'Fraunces', serif;
+      font-size:20px;font-weight:600;margin:0 0 2px;
+    }
+    #printArea .print-sub{
+      font-size:12px;color:#7A7469;margin-bottom:14px;
+    }
+    #printArea .print-page{
+      margin-bottom:22px;
+      padding-bottom:16px;
+      border-bottom:1px solid #ccc;
+    }
+    #printArea .print-page:last-of-type{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+    #printArea table{width:100%;border-collapse:collapse;font-size:12px;}
+    #printArea th{
+      text-align:left;border-bottom:1.5px solid #1A1A1A;padding:6px 8px;
+    }
+    #printArea td{padding:5px 8px;border-bottom:1px solid #ddd;}
+    #printArea tr.sunday td{background:#FDEBEA !important;color:#B3261E !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    #printArea tr.trayee-pair-end td{border-bottom:1.5px solid #999;}
+    #printArea .print-note{
+      margin-top:18px;
+      padding-top:10px;
+      border-top:1px dashed #999;
+      font-size:12px;
+      color:#26241F;
+      white-space:pre-wrap;
+    }
+  }
+</style>
+</head>
+<body>
+<button class="settings-btn" id="settingsBtn" title="Settings" aria-label="Settings">&#9881;</button>
+<div class="wrap">
+  <header class="masthead">
+    <h1>Student register for Aarti</h1>
+    <div class="header-right">
+      <div class="range" id="rangeLabel"></div>
+      <button class="print-btn" id="printBtn">Print this week (all registers)</button>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="panel">
+    <div class="goto-date-row">
+      <div class="goto-date">
+        <label for="gotoDateInput">Go to date</label>
+        <input type="date" id="gotoDateInput">
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="months" id="months"></div>
+      <div class="status" id="status">&nbsp;</div>
+    </div>
+    <div class="weeks" id="weeks"></div>
+
+    <div class="search-row">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search a student in this register…">
+    </div>
+
+    <div class="table-scroll" id="tableScrollWrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:100px;">Date</th>
+            <th style="width:60px;">Day</th>
+            <th>Name</th>
+            <th style="width:170px;">Class</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="table-scroll" id="searchResultsWrap" style="display:none;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:100px;">Date</th>
+            <th style="width:60px;">Day</th>
+            <th>Name</th>
+            <th style="width:170px;">Class</th>
+          </tr>
+        </thead>
+        <tbody id="searchResultsBody"></tbody>
+      </table>
+    </div>
+    <div id="searchEmptyMsg" style="display:none;font-size:13px;color:var(--ink-soft);padding:14px 4px;">No matches found in this register.</div>
+
+    <div class="legend"><span class="swatch"></span> Sunday</div>
+    <button class="summary-btn" id="summaryBtn" style="margin-top:14px;margin-bottom:0;">Student Report</button>
+  </div>
+
+  <footer>
+    <span>Entries save automatically in this browser.</span>
+    <div class="footer-actions">
+      <button class="fill-btn" id="holidayBtn">Holiday range</button>
+      <button class="fill-btn" id="viewHolidaysBtn">View holidays</button>
+      <button class="reset-btn" id="resetBtn">Clear this register</button>
+    </div>
+  </footer>
+</div>
+
+<div class="modal-overlay hidden" id="holidayModal">
+  <div class="modal">
+    <h2>Mark a holiday range</h2>
+    <label for="holidayFrom">From date</label>
+    <input type="date" id="holidayFrom">
+    <label for="holidayTo">To date</label>
+    <input type="date" id="holidayTo">
+    <label for="holidayReason">Reason</label>
+    <input type="text" id="holidayReason" placeholder="e.g. Festival, Maintenance">
+    <div class="modal-error" id="holidayError">&nbsp;</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="holidayCancel">Cancel</button>
+      <button class="btn-apply" id="holidayApply">Remove dates</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="holidaysListModal">
+  <div class="modal">
+    <h2>Removed dates &mdash; all registers</h2>
+    <div id="holidaysListBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="holidaysListClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="settingsModal">
+  <div class="modal" style="max-width:400px;">
+    <h2>Settings</h2>
+    <div style="font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Academic year</div>
+    <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;">Choose the start and end dates the register should cover.</div>
+    <label for="ayStart">Start date</label>
+    <input type="date" id="ayStart">
+    <label for="ayEnd">End date</label>
+    <input type="date" id="ayEnd">
+    <div class="modal-error" id="ayError">&nbsp;</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="ayReset">Reset to automatic</button>
+      <button class="btn-cancel" id="ayCancel">Cancel</button>
+      <button class="btn-apply" id="aySave">Save</button>
+    </div>
+
+    <div style="border-top:1px solid var(--rule);margin-top:18px;padding-top:16px;">
+      <div style="font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Print note</div>
+      <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;">Shown under every week you print, until you change it.</div>
+      <button class="fill-btn" id="noteBtn" style="width:100%;">Note to be added</button>
+      <div id="noteEditor" style="display:none;margin-top:10px;">
+        <textarea id="noteText" rows="3" placeholder="Type a note to show on printed weeks" style="width:100%;font:inherit;font-size:13.5px;padding:8px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink);resize:vertical;"></textarea>
+        <div class="modal-actions" style="margin-top:10px;">
+          <button class="btn-cancel" id="noteClear">Clear note</button>
+          <button class="btn-apply" id="noteSave">Save note</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--rule);margin-top:18px;padding-top:16px;">
+      <div style="font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Classes</div>
+      <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;">Edit the list of classes shown in the Class dropdown, one per line.</div>
+      <button class="fill-btn" id="classBtn" style="width:100%;">Change class list</button>
+      <div id="classEditor" style="display:none;margin-top:10px;">
+        <textarea id="classText" rows="8" placeholder="One class per line" style="width:100%;font:inherit;font-size:13.5px;padding:8px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink);resize:vertical;"></textarea>
+        <div class="modal-error" id="classError">&nbsp;</div>
+        <div class="modal-actions" style="margin-top:10px;">
+          <button class="btn-cancel" id="classResetDefault">Reset to default</button>
+          <button class="btn-cancel" id="classCancelEdit">Cancel</button>
+          <button class="btn-apply" id="classSave">Save classes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="summaryModal">
+  <div class="modal" style="max-width:460px;">
+    <h2>Name Summary</h2>
+    <div style="max-height:400px;overflow-y:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.04em;">Name</th>
+            <th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.04em;">Class</th>
+            <th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--rule);color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.04em;">Hostel</th>
+            <th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--rule);color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.04em;">Ramesh Hall</th>
+            <th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--rule);color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.04em;">Trayee</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="summaryClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
+const DEFAULT_CLASS_OPTIONS = [
+  '1BBA','2BBA','3BBA',
+  '1B-COM','2B-COM','3B-COM',
+  '1ADS','2ADS','3ADS',
+  '1FEDA','2FEDA','3FEDA',
+  '1BA-ECO','2BA-ECO','3BA-ECO',
+  '1MBA','2MBA',
+  '1MA','2MA',
+  '4 Yr'
+];
+const CLASS_OPTIONS_KEY = 'classOptions';
+
+function getClassOptions(){
+  try {
+    const raw = localStorage.getItem(CLASS_OPTIONS_KEY);
+    if (raw){
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr) && arr.length) return arr;
+    }
+  } catch (e) {}
+  return DEFAULT_CLASS_OPTIONS;
+}
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function dateKey(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(d){
+  return String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear();
+}
+function monthKey(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+}
+
+const ACADEMIC_YEAR_KEY = 'academicYearRange';
+
+// If the user has set a custom academic year in Settings, use it. Otherwise,
+// default to a rolling 1 Jul \u2013 31 May window worked out from today's date,
+// so the register keeps rolling forward automatically until someone overrides it.
+function getAcademicYearRange(){
+  try {
+    const raw = localStorage.getItem(ACADEMIC_YEAR_KEY);
+    if (raw){
+      const parsed = JSON.parse(raw);
+      const start = new Date(parsed.start + 'T00:00:00');
+      const end = new Date(parsed.end + 'T00:00:00');
+      if (!isNaN(start) && !isNaN(end) && start <= end) return {start, end};
+    }
+  } catch (e) {}
+
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = today.getMonth(); // 0 = Jan ... 6 = Jul
+  if (m >= 6) return {start: new Date(y, 6, 1), end: new Date(y + 1, 4, 31)};
+  return {start: new Date(y - 1, 6, 1), end: new Date(y, 4, 31)};
+}
+
+function buildDates(range){
+  const dates = [];
+  let d = new Date(range.start);
+  while (d <= range.end){
+    dates.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return dates;
+}
+
+// Which sheets only show a subset of days
+function dayAllowedForSheet(sheet, d){
+  if (sheet === 'Trayee'){
+    return d.getDay() === 0 || d.getDay() === 4; // Sunday, Thursday
+  }
+  return true;
+}
+
+let ALL_DATES = [];
+let YEAR_LABEL = '';
+let monthList = [];
+let ALL_WEEKS = [];
+
+function computeAllWeeks(){
+  const weeks = [];
+  let current = [];
+  ALL_DATES.forEach(d=>{
+    // Weeks run Monday \u2192 Sunday across the whole range (not cut at month boundaries),
+    // so a week straddling two months keeps its complete set of days.
+    if (d.getDay() === 1 && current.length > 0){
+      weeks.push(current);
+      current = [];
+    }
+    current.push(d);
+  });
+  if (current.length) weeks.push(current);
+  return weeks;
+}
+
+function rebuildCalendar(){
+  const range = getAcademicYearRange();
+  ALL_DATES = buildDates(range);
+  YEAR_LABEL = range.start.getFullYear() + '-' + range.end.getFullYear();
+  ALL_WEEKS = computeAllWeeks();
+
+  monthList = [];
+  const seen = new Set();
+  ALL_DATES.forEach(d=>{
+    const mk = monthKey(d);
+    if (!seen.has(mk)){
+      seen.add(mk);
+      monthList.push({key: mk, label: MONTH_NAMES[d.getMonth()] + " '" + String(d.getFullYear()).slice(2), full: MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear()});
+    }
+  });
+}
+rebuildCalendar();
+
+let currentSheet = 'Hostel';
+let currentMonth = monthList[0].key;
+let currentWeekIndex = 0;
+let sheetData = {};
+let saveTimer = null;
+
+const statusEl = document.getElementById('status');
+const tbody = document.getElementById('tbody');
+const tabsEl = document.getElementById('tabs');
+const monthsEl = document.getElementById('months');
+const weeksEl = document.getElementById('weeks');
+
+function setStatus(text){
+  statusEl.textContent = text;
+}
+
+function storageKey(sheet){
+  // Year-scoped so each academic year keeps its own data instead of overwriting the last.
+  return 'register:' + YEAR_LABEL + ':' + sheet;
+}
+function holidayStorageKey(){
+  return 'holidays:' + YEAR_LABEL;
+}
+
+let holidayData = {};
+
+function isHoliday(d){
+  return !!holidayData[dateKey(d)];
+}
+
+async function loadHolidays(){
+  try {
+    const raw = localStorage.getItem(holidayStorageKey());
+    holidayData = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    holidayData = {};
+  }
+}
+
+async function saveHolidays(){
+  try {
+    localStorage.setItem(holidayStorageKey(), JSON.stringify(holidayData || {}));
+  } catch (e) {}
+}
+
+async function loadSheet(sheet){
+  setStatus('Loading…');
+  try {
+    const raw = localStorage.getItem(storageKey(sheet));
+    sheetData[sheet] = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    sheetData[sheet] = {};
+  }
+  setStatus('\u00A0');
+}
+
+async function saveSheet(sheet){
+  try {
+    localStorage.setItem(storageKey(sheet), JSON.stringify(sheetData[sheet] || {}));
+    setStatus('Saved');
+    setTimeout(()=>{ if(statusEl.textContent==='Saved') setStatus('\u00A0'); }, 1200);
+  } catch (e) {
+    setStatus('Save failed');
+  }
+}
+
+function queueSave(sheet){
+  setStatus('Saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>saveSheet(sheet), 400);
+}
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  SHEETS.forEach(sheet=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (sheet===currentSheet ? ' active' : '');
+    btn.textContent = sheet;
+    btn.addEventListener('click', async ()=>{
+      if (sheet===currentSheet) return;
+      currentSheet = sheet;
+      renderTabs();
+      if (!sheetData[sheet]) await loadSheet(sheet);
+      clearSearch();
+      renderTable();
+    });
+    tabsEl.appendChild(btn);
+  });
+}
+
+function getWeeksForMonth(mKey){
+  // A week that spans two months is kept whole (with its adjoining-month days)
+  // and shown under any month it touches, rather than being cut at the boundary.
+  return ALL_WEEKS.filter(week => week.some(d => monthKey(d) === mKey));
+}
+function shortDate(d){
+  return d.getDate() + ' ' + MONTH_NAMES[d.getMonth()];
+}
+
+function renderMonths(){
+  monthsEl.innerHTML = '';
+  monthList.forEach(m=>{
+    const btn = document.createElement('button');
+    btn.className = 'month-pill' + (m.key===currentMonth ? ' active' : '');
+    btn.textContent = m.label;
+    btn.addEventListener('click', ()=>{
+      currentMonth = m.key;
+      currentWeekIndex = 0;
+      renderMonths();
+      renderWeeks();
+      clearSearch();
+      renderTable();
+    });
+    monthsEl.appendChild(btn);
+  });
+  renderWeeks();
+}
+
+function renderWeeks(){
+  weeksEl.innerHTML = '';
+  const weeks = getWeeksForMonth(currentMonth);
+  if (currentWeekIndex >= weeks.length) currentWeekIndex = 0;
+  weeks.forEach((week, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'week-pill' + (i===currentWeekIndex ? ' active' : '');
+    btn.textContent = shortDate(week[0]) + ' \u2013 ' + shortDate(week[week.length-1]);
+    btn.addEventListener('click', ()=>{
+      currentWeekIndex = i;
+      renderWeeks();
+      clearSearch();
+      renderTable();
+    });
+    weeksEl.appendChild(btn);
+  });
+}
+
+function appendNameClassCells(tr, entry, onNameChange, onClassChange){
+  const tdName = document.createElement('td');
+  const nameInput = document.createElement('input');
+  nameInput.className = 'name-input';
+  nameInput.type = 'text';
+  nameInput.placeholder = 'Enter name';
+  nameInput.value = entry.name || '';
+  nameInput.addEventListener('input', ()=> onNameChange(nameInput.value));
+  tdName.appendChild(nameInput);
+  tr.appendChild(tdName);
+
+  const tdClass = document.createElement('td');
+  const select = document.createElement('select');
+  select.className = 'class-select';
+  const blankOpt = document.createElement('option');
+  blankOpt.value = '';
+  blankOpt.textContent = '—';
+  select.appendChild(blankOpt);
+  getClassOptions().forEach(opt=>{
+    const o = document.createElement('option');
+    o.value = opt;
+    o.textContent = opt;
+    if (opt === entry.class) o.selected = true;
+    select.appendChild(o);
+  });
+  select.addEventListener('change', ()=> onClassChange(select.value));
+  tdClass.appendChild(select);
+  tr.appendChild(tdClass);
+}
+
+function ensureTrayeeEntry(key){
+  const raw = sheetData['Trayee'][key];
+  if (!raw || !Array.isArray(raw.entries)){
+    sheetData['Trayee'][key] = {entries: [{name:'', class:''}, {name:'', class:''}]};
+  }
+}
+
+function renderTable(){
+  tbody.innerHTML = '';
+  const data = sheetData[currentSheet] || {};
+  const frag = document.createDocumentFragment();
+
+  const weeks = getWeeksForMonth(currentMonth);
+  if (currentWeekIndex >= weeks.length) currentWeekIndex = 0;
+  const weekDates = weeks[currentWeekIndex] || [];
+
+  const isTrayee = currentSheet === 'Trayee';
+
+  weekDates.filter(d => dayAllowedForSheet(currentSheet, d) && !isHoliday(d)).forEach(d=>{
+    const key = dateKey(d);
+    const isSunday = d.getDay() === 0;
+
+    if (!isTrayee){
+      const entry = data[key] || {name:'', class:''};
+      const tr = document.createElement('tr');
+      if (isSunday) tr.className = 'sunday';
+
+      const tdDate = document.createElement('td');
+      tdDate.className = 'date-col';
+      tdDate.textContent = fmtDate(d);
+      tr.appendChild(tdDate);
+
+      const tdDay = document.createElement('td');
+      tdDay.className = 'day-col';
+      tdDay.textContent = DAY_NAMES[d.getDay()];
+      tr.appendChild(tdDay);
+
+      appendNameClassCells(tr, entry,
+        (v)=>{
+          if (!sheetData[currentSheet][key]) sheetData[currentSheet][key] = {name:'', class:''};
+          sheetData[currentSheet][key].name = v;
+          queueSave(currentSheet);
+        },
+        (v)=>{
+          if (!sheetData[currentSheet][key]) sheetData[currentSheet][key] = {name:'', class:''};
+          sheetData[currentSheet][key].class = v;
+          queueSave(currentSheet);
+        }
+      );
+      frag.appendChild(tr);
+    } else {
+      const raw = data[key];
+      const entries = (raw && Array.isArray(raw.entries)) ? raw.entries.slice(0, 2) : [];
+      while (entries.length < 2) entries.push({name:'', class:''});
+
+      const tr1 = document.createElement('tr');
+      if (isSunday) tr1.className = 'sunday';
+      const tdDate = document.createElement('td');
+      tdDate.className = 'date-col';
+      tdDate.textContent = fmtDate(d);
+      tdDate.rowSpan = 2;
+      tr1.appendChild(tdDate);
+      const tdDay = document.createElement('td');
+      tdDay.className = 'day-col';
+      tdDay.textContent = DAY_NAMES[d.getDay()];
+      tdDay.rowSpan = 2;
+      tr1.appendChild(tdDay);
+      appendNameClassCells(tr1, entries[0],
+        (v)=>{ ensureTrayeeEntry(key); sheetData['Trayee'][key].entries[0].name = v; queueSave('Trayee'); },
+        (v)=>{ ensureTrayeeEntry(key); sheetData['Trayee'][key].entries[0].class = v; queueSave('Trayee'); }
+      );
+      frag.appendChild(tr1);
+
+      const tr2 = document.createElement('tr');
+      if (isSunday) tr2.className = 'sunday';
+      appendNameClassCells(tr2, entries[1],
+        (v)=>{ ensureTrayeeEntry(key); sheetData['Trayee'][key].entries[1].name = v; queueSave('Trayee'); },
+        (v)=>{ ensureTrayeeEntry(key); sheetData['Trayee'][key].entries[1].class = v; queueSave('Trayee'); }
+      );
+      frag.appendChild(tr2);
+    }
+  });
+
+  tbody.appendChild(frag);
+}
+
+/* ---- Go to date ---- */
+const gotoDateInput = document.getElementById('gotoDateInput');
+
+gotoDateInput.addEventListener('change', ()=>{
+  const val = gotoDateInput.value;
+  if (!val) return;
+  const target = new Date(val + 'T00:00:00');
+  const minD = ALL_DATES[0], maxD = ALL_DATES[ALL_DATES.length - 1];
+  if (target < minD || target > maxD){
+    alert('That date is outside the current academic year range (' + fmtDate(minD) + ' \u2013 ' + fmtDate(maxD) + ').');
+    return;
+  }
+  const mk = monthKey(target);
+  currentMonth = mk;
+  const weeks = getWeeksForMonth(mk);
+  const idx = weeks.findIndex(week => week.some(d => dateKey(d) === dateKey(target)));
+  currentWeekIndex = idx >= 0 ? idx : 0;
+  renderMonths();
+  renderWeeks();
+  clearSearch();
+  renderTable();
+});
+
+/* ---- Search a student within the current register ---- */
+const searchInput = document.getElementById('searchInput');
+const tableScrollWrap = document.getElementById('tableScrollWrap');
+const searchResultsWrap = document.getElementById('searchResultsWrap');
+const searchResultsBody = document.getElementById('searchResultsBody');
+const searchEmptyMsg = document.getElementById('searchEmptyMsg');
+
+function clearSearch(){
+  searchInput.value = '';
+  searchResultsWrap.style.display = 'none';
+  searchEmptyMsg.style.display = 'none';
+  tableScrollWrap.style.display = '';
+}
+
+function runSearch(query){
+  const q = query.trim().toLowerCase();
+  if (!q){
+    clearSearch();
+    return;
+  }
+
+  const data = sheetData[currentSheet] || {};
+  const results = [];
+
+  Object.keys(data).forEach(key=>{
+    const d = new Date(key + 'T00:00:00');
+    if (isHoliday(d)) return;
+    const raw = data[key];
+
+    if (currentSheet === 'Trayee' && raw && Array.isArray(raw.entries)){
+      raw.entries.forEach(e=>{
+        if (e && e.name && e.name.toLowerCase().includes(q)){
+          results.push({date: d, name: e.name, class: e.class});
+        }
+      });
+    } else if (raw && raw.name && raw.name.toLowerCase().includes(q)){
+      results.push({date: d, name: raw.name, class: raw.class});
+    }
+  });
+
+  results.sort((a,b)=> a.date - b.date);
+
+  tableScrollWrap.style.display = 'none';
+  searchResultsBody.innerHTML = '';
+
+  if (results.length === 0){
+    searchResultsWrap.style.display = 'none';
+    searchEmptyMsg.style.display = 'block';
+    return;
+  }
+
+  searchEmptyMsg.style.display = 'none';
+  searchResultsWrap.style.display = '';
+
+  results.forEach(r=>{
+    const isSunday = r.date.getDay() === 0;
+    const tr = document.createElement('tr');
+    if (isSunday) tr.className = 'sunday';
+    tr.innerHTML =
+      '<td class="date-col">' + fmtDate(r.date) + '</td>' +
+      '<td class="day-col">' + DAY_NAMES[r.date.getDay()] + '</td>' +
+      '<td>' + r.name + '</td>' +
+      '<td>' + (r.class || '') + '</td>';
+    searchResultsBody.appendChild(tr);
+  });
+}
+
+let searchTimer = null;
+searchInput.addEventListener('input', ()=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=> runSearch(searchInput.value), 150);
+});
+
+document.getElementById('resetBtn').addEventListener('click', async ()=>{
+  if (!confirm('Clear all entries in the ' + currentSheet + ' register? This cannot be undone.')) return;
+  sheetData[currentSheet] = {};
+  renderTable();
+  await saveSheet(currentSheet);
+});
+
+/* ---- Mark a holiday range (removes those dates from the list) ---- */
+const holidayModal = document.getElementById('holidayModal');
+const holidayFrom = document.getElementById('holidayFrom');
+const holidayTo = document.getElementById('holidayTo');
+const holidayReason = document.getElementById('holidayReason');
+const holidayError = document.getElementById('holidayError');
+
+document.getElementById('holidayBtn').addEventListener('click', ()=>{
+  holidayFrom.value = '';
+  holidayTo.value = '';
+  holidayReason.value = '';
+  holidayError.textContent = '\u00A0';
+  holidayModal.classList.remove('hidden');
+  holidayFrom.focus();
+});
+document.getElementById('holidayCancel').addEventListener('click', ()=>{
+  holidayModal.classList.add('hidden');
+});
+holidayModal.addEventListener('click', (e)=>{
+  if (e.target === holidayModal) holidayModal.classList.add('hidden');
+});
+
+document.getElementById('holidayApply').addEventListener('click', async ()=>{
+  const fromVal = holidayFrom.value;
+  const toVal = holidayTo.value;
+  const reason = holidayReason.value.trim();
+
+  if (!fromVal || !toVal){
+    holidayError.textContent = 'Pick both a from and a to date.';
+    return;
+  }
+  const from = new Date(fromVal + 'T00:00:00');
+  const to = new Date(toVal + 'T00:00:00');
+  if (from > to){
+    holidayError.textContent = 'From date must be before the to date.';
+    return;
+  }
+  if (!reason){
+    holidayError.textContent = 'Please add a reason.';
+    return;
+  }
+
+  ALL_DATES.forEach(d=>{
+    if (d >= from && d <= to){
+      holidayData[dateKey(d)] = reason;
+    }
+  });
+
+  renderTable();
+  await saveHolidays();
+  holidayModal.classList.add('hidden');
+});
+
+/* ---- View / restore removed (holiday) dates ---- */
+const holidaysListModal = document.getElementById('holidaysListModal');
+
+function renderHolidaysList(){
+  const body = document.getElementById('holidaysListBody');
+  body.innerHTML = '';
+  const entries = Object.entries(holidayData || {}).sort((a,b)=> a[0] < b[0] ? -1 : 1);
+
+  if (entries.length === 0){
+    const empty = document.createElement('div');
+    empty.style.cssText = 'font-size:13px;color:var(--ink-soft);padding:6px 0 2px;';
+    empty.textContent = 'No dates removed.';
+    body.appendChild(empty);
+    return;
+  }
+
+  entries.forEach(([key, reason])=>{
+    const d = new Date(key + 'T00:00:00');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);';
+
+    const info = document.createElement('div');
+    const dateLine = document.createElement('div');
+    dateLine.style.cssText = 'font-size:13.5px;font-weight:600;';
+    dateLine.textContent = fmtDate(d);
+    const reasonLine = document.createElement('div');
+    reasonLine.style.cssText = 'font-size:12px;color:var(--ink-soft);';
+    reasonLine.textContent = reason;
+    info.appendChild(dateLine);
+    info.appendChild(reasonLine);
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-cancel';
+    btn.style.cssText = 'font-size:12px;padding:5px 12px;flex:none;';
+    btn.textContent = 'Restore';
+    btn.addEventListener('click', async ()=>{
+      delete holidayData[key];
+      await saveHolidays();
+      renderTable();
+      renderHolidaysList();
+    });
+
+    row.appendChild(info);
+    row.appendChild(btn);
+    body.appendChild(row);
+  });
+}
+
+document.getElementById('viewHolidaysBtn').addEventListener('click', ()=>{
+  renderHolidaysList();
+  holidaysListModal.classList.remove('hidden');
+});
+document.getElementById('holidaysListClose').addEventListener('click', ()=>{
+  holidaysListModal.classList.add('hidden');
+});
+holidaysListModal.addEventListener('click', (e)=>{
+  if (e.target === holidaysListModal) holidaysListModal.classList.add('hidden');
+});
+
+/* ---- Print the selected week for all three registers ---- */
+const printArea = document.getElementById('printArea');
+const PRINT_NOTE_KEY = 'printNote';
+
+function getPrintNote(){
+  try {
+    return localStorage.getItem(PRINT_NOTE_KEY) || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function buildPrintSectionHTML(sheet, weekDates){
+  const data = sheetData[sheet] || {};
+  const relevantDates = weekDates.filter(d => dayAllowedForSheet(sheet, d) && !isHoliday(d));
+  let rows = '';
+  relevantDates.forEach(d=>{
+    const key = dateKey(d);
+    const isSunday = d.getDay() === 0;
+    const sundayClass = isSunday ? ' sunday' : '';
+
+    if (sheet === 'Trayee'){
+      const raw = data[key];
+      const entries = (raw && Array.isArray(raw.entries)) ? raw.entries.slice(0, 2) : [];
+      while (entries.length < 2) entries.push({name:'', class:''});
+      rows += '<tr class="' + ('trayee-pair-start' + sundayClass) + '">' +
+        '<td rowspan="2">' + fmtDate(d) + '</td>' +
+        '<td rowspan="2">' + DAY_NAMES[d.getDay()] + '</td>' +
+        '<td style="text-align:center;">1</td>' +
+        '<td>' + (entries[0].name || '') + '</td>' +
+        '<td>' + (entries[0].class || '') + '</td>' +
+        '</tr>';
+      rows += '<tr class="' + ('trayee-pair-end' + sundayClass) + '">' +
+        '<td style="text-align:center;">2</td>' +
+        '<td>' + (entries[1].name || '') + '</td>' +
+        '<td>' + (entries[1].class || '') + '</td>' +
+        '</tr>';
+    } else {
+      const entry = data[key] || {name:'', class:''};
+      rows += '<tr class="' + sundayClass.trim() + '">' +
+        '<td>' + fmtDate(d) + '</td>' +
+        '<td>' + DAY_NAMES[d.getDay()] + '</td>' +
+        '<td>' + (entry.name || '') + '</td>' +
+        '<td>' + (entry.class || '') + '</td>' +
+        '</tr>';
+    }
+  });
+
+  const weekLabel = weekDates.length
+    ? shortDate(weekDates[0]) + ' \u2013 ' + shortDate(weekDates[weekDates.length - 1])
+    : '';
+
+  const headerRow = sheet === 'Trayee'
+    ? '<tr><th style="width:80px;">Date</th><th style="width:45px;">Day</th><th style="width:30px;">No.</th><th>Name</th><th style="width:110px;">Class</th></tr>'
+    : '<tr><th style="width:90px;">Date</th><th style="width:50px;">Day</th><th>Name</th><th style="width:120px;">Class</th></tr>';
+
+  return (
+    '<section class="print-page">' +
+      '<h2>' + sheet + ' \u2014 Week of ' + weekLabel + '</h2>' +
+      '<div class="print-sub">Aarti List</div>' +
+      '<table>' +
+        '<thead>' + headerRow + '</thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+    '</section>'
+  );
+}
+
+document.getElementById('printBtn').addEventListener('click', async ()=>{
+  setStatus('Preparing…');
+  for (const sheet of SHEETS){
+    if (!sheetData[sheet]) await loadSheet(sheet);
+  }
+  const weeks = getWeeksForMonth(currentMonth);
+  const weekDates = weeks[currentWeekIndex] || weeks[0] || [];
+
+  const sectionsHTML = SHEETS.map(sheet => buildPrintSectionHTML(sheet, weekDates)).join('');
+
+  const note = getPrintNote();
+  const noteHTML = note
+    ? '<div class="print-note"><strong>Note:</strong> ' + note.replace(/</g,'&lt;') + '</div>'
+    : '';
+
+  printArea.innerHTML = sectionsHTML + noteHTML;
+  setStatus('\u00A0');
+  window.print();
+});
+
+function fmtLongDate(d){
+  return d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+/* ---- Name Summary: count entries per name across all registers ---- */
+const summaryModal = document.getElementById('summaryModal');
+const summaryBody = document.getElementById('summaryBody');
+
+function computeNameCounts(){
+  const counts = {}; // name -> { Hostel: n, 'Ramesh Hall': n, Trayee: n, classes: Set }
+
+  function tally(name, cls, sheet){
+    name = name ? name.trim() : '';
+    if (!name) return;
+    if (!counts[name]) counts[name] = {classes: new Set()};
+    SHEETS.forEach(s=>{ if (counts[name][s] === undefined) counts[name][s] = 0; });
+    counts[name][sheet] += 1;
+    cls = cls ? cls.trim() : '';
+    if (cls) counts[name].classes.add(cls);
+  }
+
+  SHEETS.forEach(sheet=>{
+    const data = sheetData[sheet] || {};
+    Object.values(data).forEach(entry=>{
+      if (sheet === 'Trayee' && entry && Array.isArray(entry.entries)){
+        entry.entries.forEach(e => tally(e.name, e.class, sheet));
+      } else {
+        tally(entry && entry.name, entry && entry.class, sheet);
+      }
+    });
+  });
+  return counts;
+}
+
+document.getElementById('summaryBtn').addEventListener('click', async ()=>{
+  setStatus('Preparing…');
+  for (const sheet of SHEETS){
+    if (!sheetData[sheet]) await loadSheet(sheet);
+  }
+  setStatus('\u00A0');
+
+  const counts = computeNameCounts();
+  const names = Object.keys(counts).sort((a,b)=> a.localeCompare(b));
+
+  summaryBody.innerHTML = '';
+  if (names.length === 0){
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="5" style="padding:12px 8px;color:var(--ink-soft);font-size:13px;">No names entered yet.</td>';
+    summaryBody.appendChild(tr);
+  } else {
+    names.forEach(name=>{
+      const c = counts[name];
+      const classText = Array.from(c.classes).join(', ');
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td style="padding:6px 8px;border-bottom:1px solid var(--rule);">' + name + '</td>' +
+        '<td style="padding:6px 8px;border-bottom:1px solid var(--rule);">' + classText + '</td>' +
+        '<td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:center;">' + (c['Hostel'] || 0) + '</td>' +
+        '<td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:center;">' + (c['Ramesh Hall'] || 0) + '</td>' +
+        '<td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:center;">' + (c['Trayee'] || 0) + '</td>';
+      summaryBody.appendChild(tr);
+    });
+  }
+
+  summaryModal.classList.remove('hidden');
+});
+document.getElementById('summaryClose').addEventListener('click', ()=>{
+  summaryModal.classList.add('hidden');
+});
+summaryModal.addEventListener('click', (e)=>{
+  if (e.target === summaryModal) summaryModal.classList.add('hidden');
+});
+
+function applyCalendarToUI(){
+  document.getElementById('rangeLabel').textContent =
+    fmtLongDate(ALL_DATES[0]) + ' \u2013 ' + fmtLongDate(ALL_DATES[ALL_DATES.length - 1]);
+
+  const isoMin = dateKey(ALL_DATES[0]);
+  const isoMax = dateKey(ALL_DATES[ALL_DATES.length - 1]);
+  holidayFrom.min = isoMin; holidayFrom.max = isoMax;
+  holidayTo.min = isoMin; holidayTo.max = isoMax;
+  gotoDateInput.min = isoMin; gotoDateInput.max = isoMax;
+}
+
+/* ---- Settings: editable academic year ---- */
+const settingsModal = document.getElementById('settingsModal');
+const ayStart = document.getElementById('ayStart');
+const ayEnd = document.getElementById('ayEnd');
+const ayError = document.getElementById('ayError');
+
+document.getElementById('settingsBtn').addEventListener('click', ()=>{
+  ayStart.value = dateKey(ALL_DATES[0]);
+  ayEnd.value = dateKey(ALL_DATES[ALL_DATES.length - 1]);
+  ayError.textContent = '\u00A0';
+  settingsModal.classList.remove('hidden');
+});
+document.getElementById('ayCancel').addEventListener('click', ()=>{
+  settingsModal.classList.add('hidden');
+});
+settingsModal.addEventListener('click', (e)=>{
+  if (e.target === settingsModal) settingsModal.classList.add('hidden');
+});
+
+async function applyNewAcademicYear(){
+  rebuildCalendar();
+  currentMonth = monthList[0].key;
+  currentWeekIndex = 0;
+  sheetData = {};
+  holidayData = {};
+  applyCalendarToUI();
+  renderMonths();
+  await loadHolidays();
+  await loadSheet(currentSheet);
+  renderTable();
+}
+
+document.getElementById('aySave').addEventListener('click', async ()=>{
+  const startVal = ayStart.value;
+  const endVal = ayEnd.value;
+  if (!startVal || !endVal){
+    ayError.textContent = 'Pick both a start and an end date.';
+    return;
+  }
+  if (new Date(startVal) > new Date(endVal)){
+    ayError.textContent = 'Start date must be before the end date.';
+    return;
+  }
+  localStorage.setItem(ACADEMIC_YEAR_KEY, JSON.stringify({start: startVal, end: endVal}));
+  await applyNewAcademicYear();
+  settingsModal.classList.add('hidden');
+});
+
+document.getElementById('ayReset').addEventListener('click', async ()=>{
+  localStorage.removeItem(ACADEMIC_YEAR_KEY);
+  await applyNewAcademicYear();
+  settingsModal.classList.add('hidden');
+});
+
+/* ---- Print note ---- */
+const noteBtn = document.getElementById('noteBtn');
+const noteEditor = document.getElementById('noteEditor');
+const noteText = document.getElementById('noteText');
+
+noteBtn.addEventListener('click', ()=>{
+  const isOpen = noteEditor.style.display !== 'none';
+  if (isOpen){
+    noteEditor.style.display = 'none';
+    return;
+  }
+  noteText.value = getPrintNote();
+  noteEditor.style.display = 'block';
+  noteText.focus();
+});
+
+document.getElementById('noteSave').addEventListener('click', ()=>{
+  try {
+    localStorage.setItem(PRINT_NOTE_KEY, noteText.value);
+  } catch (e) {}
+  noteEditor.style.display = 'none';
+});
+
+document.getElementById('noteClear').addEventListener('click', ()=>{
+  noteText.value = '';
+  try {
+    localStorage.removeItem(PRINT_NOTE_KEY);
+  } catch (e) {}
+  noteEditor.style.display = 'none';
+});
+
+/* ---- Change class list ---- */
+const classBtn = document.getElementById('classBtn');
+const classEditor = document.getElementById('classEditor');
+const classText = document.getElementById('classText');
+const classError = document.getElementById('classError');
+
+classBtn.addEventListener('click', ()=>{
+  const isOpen = classEditor.style.display !== 'none';
+  if (isOpen){
+    classEditor.style.display = 'none';
+    return;
+  }
+  classText.value = getClassOptions().join('\n');
+  classError.textContent = '\u00A0';
+  classEditor.style.display = 'block';
+  classText.focus();
+});
+
+document.getElementById('classCancelEdit').addEventListener('click', ()=>{
+  classEditor.style.display = 'none';
+});
+
+document.getElementById('classSave').addEventListener('click', ()=>{
+  const lines = classText.value.split('\n').map(s => s.trim()).filter(Boolean);
+  if (lines.length === 0){
+    classError.textContent = 'Enter at least one class.';
+    return;
+  }
+  try {
+    localStorage.setItem(CLASS_OPTIONS_KEY, JSON.stringify(lines));
+  } catch (e) {}
+  classEditor.style.display = 'none';
+  renderTable();
+});
+
+document.getElementById('classResetDefault').addEventListener('click', ()=>{
+  try {
+    localStorage.removeItem(CLASS_OPTIONS_KEY);
+  } catch (e) {}
+  classText.value = DEFAULT_CLASS_OPTIONS.join('\n');
+  renderTable();
+});
+
+(async function init(){
+  applyCalendarToUI();
+
+  renderTabs();
+  renderMonths();
+  await loadHolidays();
+  await loadSheet(currentSheet);
+  renderTable();
+})();
+</script>
+</body>
+</html>
