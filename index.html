@@ -614,7 +614,7 @@
       <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;">Shown under every week you print, until you change it.</div>
       <button class="fill-btn" id="noteBtn" style="width:100%;">Note to be added</button>
       <div id="noteEditor" style="display:none;margin-top:10px;">
-        <textarea id="noteText" rows="3" placeholder="Type a note to show on printed weeks" style="width:100%;font:inherit;font-size:13.5px;padding:8px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink);resize:vertical;"></textarea>
+        <textarea id="noteText" rows="8" placeholder="Type a note to show on printed weeks" style="width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;line-height:1.5;min-height:160px;"></textarea>
         <div class="modal-actions" style="margin-top:10px;">
           <button class="btn-cancel" id="noteClear">Clear note</button>
           <button class="btn-apply" id="noteSave">Save note</button>
@@ -997,7 +997,37 @@ function renderTable(){
         }
       );
       frag.appendChild(tr);
+    } else if (isSunday){
+      // Trayee Sundays: single entry, same as a normal register row.
+      const entry = (data[key] && !Array.isArray(data[key].entries)) ? data[key] : {name:'', class:''};
+      const tr = document.createElement('tr');
+      tr.className = 'sunday';
+
+      const tdDate = document.createElement('td');
+      tdDate.className = 'date-col';
+      tdDate.textContent = fmtDate(d);
+      tr.appendChild(tdDate);
+
+      const tdDay = document.createElement('td');
+      tdDay.className = 'day-col';
+      tdDay.textContent = DAY_NAMES[d.getDay()];
+      tr.appendChild(tdDay);
+
+      appendNameClassCells(tr, entry,
+        (v)=>{
+          if (!sheetData['Trayee'][key] || Array.isArray(sheetData['Trayee'][key].entries)) sheetData['Trayee'][key] = {name:'', class:''};
+          sheetData['Trayee'][key].name = v;
+          queueSave('Trayee');
+        },
+        (v)=>{
+          if (!sheetData['Trayee'][key] || Array.isArray(sheetData['Trayee'][key].entries)) sheetData['Trayee'][key] = {name:'', class:''};
+          sheetData['Trayee'][key].class = v;
+          queueSave('Trayee');
+        }
+      );
+      frag.appendChild(tr);
     } else {
+      // Trayee Thursdays: two entries per date.
       const raw = data[key];
       const entries = (raw && Array.isArray(raw.entries)) ? raw.entries.slice(0, 2) : [];
       while (entries.length < 2) entries.push({name:'', class:''});
@@ -1036,6 +1066,14 @@ function renderTable(){
 /* ---- Go to date ---- */
 const gotoDateInput = document.getElementById('gotoDateInput');
 
+function jumpToDate(target){
+  const mk = monthKey(target);
+  currentMonth = mk;
+  const weeks = getWeeksForMonth(mk);
+  const idx = weeks.findIndex(week => week.some(d => dateKey(d) === dateKey(target)));
+  currentWeekIndex = idx >= 0 ? idx : 0;
+}
+
 gotoDateInput.addEventListener('change', ()=>{
   const val = gotoDateInput.value;
   if (!val) return;
@@ -1045,11 +1083,7 @@ gotoDateInput.addEventListener('change', ()=>{
     alert('That date is outside the current academic year range (' + fmtDate(minD) + ' \u2013 ' + fmtDate(maxD) + ').');
     return;
   }
-  const mk = monthKey(target);
-  currentMonth = mk;
-  const weeks = getWeeksForMonth(mk);
-  const idx = weeks.findIndex(week => week.some(d => dateKey(d) === dateKey(target)));
-  currentWeekIndex = idx >= 0 ? idx : 0;
+  jumpToDate(target);
   renderMonths();
   renderWeeks();
   clearSearch();
@@ -1269,7 +1303,8 @@ function buildPrintSectionHTML(sheet, weekDates){
     const isSunday = d.getDay() === 0;
     const sundayClass = isSunday ? ' sunday' : '';
 
-    if (sheet === 'Trayee'){
+    if (sheet === 'Trayee' && !isSunday){
+      // Trayee Thursdays: two entries per date, in print too.
       const raw = data[key];
       const entries = (raw && Array.isArray(raw.entries)) ? raw.entries.slice(0, 2) : [];
       while (entries.length < 2) entries.push({name:'', class:''});
@@ -1284,6 +1319,17 @@ function buildPrintSectionHTML(sheet, weekDates){
         '<td style="text-align:center;">2</td>' +
         '<td>' + (entries[1].name || '') + '</td>' +
         '<td>' + (entries[1].class || '') + '</td>' +
+        '</tr>';
+    } else if (sheet === 'Trayee' && isSunday){
+      // Trayee Sundays: single entry \u2014 keep the same 5-column layout for alignment,
+      // just leave the entry-number cell blank.
+      const entry = (data[key] && !Array.isArray(data[key].entries)) ? data[key] : {name:'', class:''};
+      rows += '<tr class="' + sundayClass.trim() + '">' +
+        '<td>' + fmtDate(d) + '</td>' +
+        '<td>' + DAY_NAMES[d.getDay()] + '</td>' +
+        '<td></td>' +
+        '<td>' + (entry.name || '') + '</td>' +
+        '<td>' + (entry.class || '') + '</td>' +
         '</tr>';
     } else {
       const entry = data[key] || {name:'', class:''};
@@ -1550,6 +1596,14 @@ document.getElementById('classResetDefault').addEventListener('click', ()=>{
 
 (async function init(){
   applyCalendarToUI();
+
+  // Open on the week containing today, if today falls within the academic year;
+  // otherwise fall back to the first week of the range.
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (today >= ALL_DATES[0] && today <= ALL_DATES[ALL_DATES.length - 1]){
+    jumpToDate(today);
+  }
 
   renderTabs();
   renderMonths();
