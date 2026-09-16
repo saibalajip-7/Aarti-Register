@@ -666,6 +666,35 @@
 
 <script>
 const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
+
+/* ---- Shared storage: talks to /api/data, backed by Vercel KV ---- */
+async function kvGet(key){
+  try {
+    const res = await fetch('/api/data?key=' + encodeURIComponent(key));
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.value;
+  } catch (e) {
+    return null;
+  }
+}
+async function kvSet(key, value){
+  try {
+    await fetch('/api/data?key=' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({value})
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+async function kvDelete(key){
+  try {
+    await fetch('/api/data?key=' + encodeURIComponent(key), {method: 'DELETE'});
+  } catch (e) {}
+}
 const DEFAULT_CLASS_OPTIONS = [
   '1BBA','2BBA','3BBA',
   '1B-COM','2B-COM','3B-COM',
@@ -677,16 +706,14 @@ const DEFAULT_CLASS_OPTIONS = [
   '4 Yr'
 ];
 const CLASS_OPTIONS_KEY = 'classOptions';
+let cachedClassOptions = null;
 
 function getClassOptions(){
-  try {
-    const raw = localStorage.getItem(CLASS_OPTIONS_KEY);
-    if (raw){
-      const arr = JSON.parse(raw);
-      if (Array.isArray(arr) && arr.length) return arr;
-    }
-  } catch (e) {}
-  return DEFAULT_CLASS_OPTIONS;
+  return cachedClassOptions && cachedClassOptions.length ? cachedClassOptions : DEFAULT_CLASS_OPTIONS;
+}
+async function loadClassOptions(){
+  const value = await kvGet(CLASS_OPTIONS_KEY);
+  if (Array.isArray(value) && value.length) cachedClassOptions = value;
 }
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -702,26 +729,27 @@ function monthKey(d){
 }
 
 const ACADEMIC_YEAR_KEY = 'academicYearRange';
+let customAcademicYearRange = null;
 
 // If the user has set a custom academic year in Settings, use it. Otherwise,
 // default to a rolling 1 Jul \u2013 31 May window worked out from today's date,
 // so the register keeps rolling forward automatically until someone overrides it.
 function getAcademicYearRange(){
-  try {
-    const raw = localStorage.getItem(ACADEMIC_YEAR_KEY);
-    if (raw){
-      const parsed = JSON.parse(raw);
-      const start = new Date(parsed.start + 'T00:00:00');
-      const end = new Date(parsed.end + 'T00:00:00');
-      if (!isNaN(start) && !isNaN(end) && start <= end) return {start, end};
-    }
-  } catch (e) {}
+  if (customAcademicYearRange) return customAcademicYearRange;
 
   const today = new Date();
   const y = today.getFullYear();
   const m = today.getMonth(); // 0 = Jan ... 6 = Jul
   if (m >= 6) return {start: new Date(y, 6, 1), end: new Date(y + 1, 4, 31)};
   return {start: new Date(y - 1, 6, 1), end: new Date(y, 4, 31)};
+}
+async function loadCustomAcademicYearRange(){
+  const value = await kvGet(ACADEMIC_YEAR_KEY);
+  if (value && value.start && value.end){
+    const start = new Date(value.start + 'T00:00:00');
+    const end = new Date(value.end + 'T00:00:00');
+    if (!isNaN(start) && !isNaN(end) && start <= end) customAcademicYearRange = {start, end};
+  }
 }
 
 function buildDates(range){
@@ -812,37 +840,27 @@ function isHoliday(d){
 }
 
 async function loadHolidays(){
-  try {
-    const raw = localStorage.getItem(holidayStorageKey());
-    holidayData = raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    holidayData = {};
-  }
+  const value = await kvGet(holidayStorageKey());
+  holidayData = (value && typeof value === 'object') ? value : {};
 }
 
 async function saveHolidays(){
-  try {
-    localStorage.setItem(holidayStorageKey(), JSON.stringify(holidayData || {}));
-  } catch (e) {}
+  await kvSet(holidayStorageKey(), holidayData || {});
 }
 
 async function loadSheet(sheet){
   setStatus('Loading…');
-  try {
-    const raw = localStorage.getItem(storageKey(sheet));
-    sheetData[sheet] = raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    sheetData[sheet] = {};
-  }
+  const value = await kvGet(storageKey(sheet));
+  sheetData[sheet] = (value && typeof value === 'object') ? value : {};
   setStatus('\u00A0');
 }
 
 async function saveSheet(sheet){
-  try {
-    localStorage.setItem(storageKey(sheet), JSON.stringify(sheetData[sheet] || {}));
+  const ok = await kvSet(storageKey(sheet), sheetData[sheet] || {});
+  if (ok){
     setStatus('Saved');
     setTimeout(()=>{ if(statusEl.textContent==='Saved') setStatus('\u00A0'); }, 1200);
-  } catch (e) {
+  } else {
     setStatus('Save failed');
   }
 }
@@ -1285,13 +1303,14 @@ holidaysListModal.addEventListener('click', (e)=>{
 /* ---- Print the selected week for all three registers ---- */
 const printArea = document.getElementById('printArea');
 const PRINT_NOTE_KEY = 'printNote';
+let cachedPrintNote = '';
 
 function getPrintNote(){
-  try {
-    return localStorage.getItem(PRINT_NOTE_KEY) || '';
-  } catch (e) {
-    return '';
-  }
+  return cachedPrintNote;
+}
+async function loadPrintNote(){
+  const value = await kvGet(PRINT_NOTE_KEY);
+  cachedPrintNote = (typeof value === 'string') ? value : '';
 }
 
 function buildPrintSectionHTML(sheet, weekDates){
@@ -1509,13 +1528,15 @@ document.getElementById('aySave').addEventListener('click', async ()=>{
     ayError.textContent = 'Start date must be before the end date.';
     return;
   }
-  localStorage.setItem(ACADEMIC_YEAR_KEY, JSON.stringify({start: startVal, end: endVal}));
+  await kvSet(ACADEMIC_YEAR_KEY, {start: startVal, end: endVal});
+  customAcademicYearRange = {start: new Date(startVal + 'T00:00:00'), end: new Date(endVal + 'T00:00:00')};
   await applyNewAcademicYear();
   settingsModal.classList.add('hidden');
 });
 
 document.getElementById('ayReset').addEventListener('click', async ()=>{
-  localStorage.removeItem(ACADEMIC_YEAR_KEY);
+  await kvDelete(ACADEMIC_YEAR_KEY);
+  customAcademicYearRange = null;
   await applyNewAcademicYear();
   settingsModal.classList.add('hidden');
 });
@@ -1536,18 +1557,16 @@ noteBtn.addEventListener('click', ()=>{
   noteText.focus();
 });
 
-document.getElementById('noteSave').addEventListener('click', ()=>{
-  try {
-    localStorage.setItem(PRINT_NOTE_KEY, noteText.value);
-  } catch (e) {}
+document.getElementById('noteSave').addEventListener('click', async ()=>{
+  await kvSet(PRINT_NOTE_KEY, noteText.value);
+  cachedPrintNote = noteText.value;
   noteEditor.style.display = 'none';
 });
 
-document.getElementById('noteClear').addEventListener('click', ()=>{
+document.getElementById('noteClear').addEventListener('click', async ()=>{
   noteText.value = '';
-  try {
-    localStorage.removeItem(PRINT_NOTE_KEY);
-  } catch (e) {}
+  await kvDelete(PRINT_NOTE_KEY);
+  cachedPrintNote = '';
   noteEditor.style.display = 'none';
 });
 
@@ -1573,29 +1592,34 @@ document.getElementById('classCancelEdit').addEventListener('click', ()=>{
   classEditor.style.display = 'none';
 });
 
-document.getElementById('classSave').addEventListener('click', ()=>{
+document.getElementById('classSave').addEventListener('click', async ()=>{
   const lines = classText.value.split('\n').map(s => s.trim()).filter(Boolean);
   if (lines.length === 0){
     classError.textContent = 'Enter at least one class.';
     return;
   }
-  try {
-    localStorage.setItem(CLASS_OPTIONS_KEY, JSON.stringify(lines));
-  } catch (e) {}
+  await kvSet(CLASS_OPTIONS_KEY, lines);
+  cachedClassOptions = lines;
   classEditor.style.display = 'none';
   renderTable();
 });
 
-document.getElementById('classResetDefault').addEventListener('click', ()=>{
-  try {
-    localStorage.removeItem(CLASS_OPTIONS_KEY);
-  } catch (e) {}
+document.getElementById('classResetDefault').addEventListener('click', async ()=>{
+  await kvDelete(CLASS_OPTIONS_KEY);
+  cachedClassOptions = null;
   classText.value = DEFAULT_CLASS_OPTIONS.join('\n');
   renderTable();
 });
 
 (async function init(){
   applyCalendarToUI();
+
+  await Promise.all([loadClassOptions(), loadPrintNote(), loadCustomAcademicYearRange()]);
+
+  if (customAcademicYearRange){
+    rebuildCalendar();
+    applyCalendarToUI();
+  }
 
   // Open on the week containing today, if today falls within the academic year;
   // otherwise fall back to the first week of the range.
