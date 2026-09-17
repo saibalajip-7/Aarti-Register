@@ -8,17 +8,17 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#F7F1E4;
-    --card:#FFFDF8;
-    --ink:#26241F;
-    --ink-soft:#7A7469;
-    --rule:#E3D8BF;
-    --brass:#A9762F;
-    --brass-deep:#8A5F24;
-    --brass-soft:#F1E3C4;
-    --sunday-bg:#8C3327;
-    --sunday-fg:#FBEEE7;
-    --focus:#A9762F;
+    --paper:#EEF7FF;
+      --card:#FFFFFF;
+      --ink:#203040;
+      --ink-soft:#64748B;
+      --rule:#D5E4F0;
+      --brass:#2F80ED;
+      --brass-deep:#1769C2;
+      --brass-soft:#DCEEFF;
+      --sunday-bg:#7C3AED;
+      --sunday-fg:#FFFFFF;
+      --focus:#14B8A6;
   }
 
   *{box-sizing:border-box;}
@@ -117,7 +117,7 @@
   }
   .tab:hover:not(.active){
     color:var(--ink);
-    background:#EAD9AF;
+    background:#CDEBFF;
   }
 
   .panel{
@@ -543,7 +543,12 @@
       white-space:pre-wrap;
     }
   }
-</style>
+
+    .accent-teal{color:#0F766E}
+    .accent-purple{color:#7C3AED}
+    .accent-blue{color:#1769C2}
+    .accent-bg{background:linear-gradient(135deg,#EAF6FF 0%,#F5EEFF 100%)}
+    
 </head>
 <body>
 <div id="loginOverlay" class="login-overlay">
@@ -739,14 +744,18 @@ const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
 /* ---- Login / auth token ---- */
 const AUTH_TOKEN_KEY = 'authToken';
+
 function getAuthToken(){
-  try { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
+  try { return sessionStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
 }
+
 function setAuthToken(token){
-  try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {}
+  try { sessionStorage.setItem(AUTH_TOKEN_KEY, token || ''); } catch (e) {}
 }
+
 function clearAuthToken(){
-  try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
+  try { sessionStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
+} catch (e) {}
 }
 
 /* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
@@ -1774,7 +1783,8 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
 });
 
 (function startup(){
-  if (getAuthToken()){
+  const token = getAuthToken();
+  if (token) {
     showApp();
   } else {
     loginOverlay.style.display = 'flex';
