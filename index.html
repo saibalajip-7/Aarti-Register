@@ -8,17 +8,17 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#F7F1E4;
-    --card:#FFFDF8;
-    --ink:#26241F;
-    --ink-soft:#7A7469;
-    --rule:#E3D8BF;
-    --brass:#A9762F;
-    --brass-deep:#8A5F24;
-    --brass-soft:#F1E3C4;
-    --sunday-bg:#8C3327;
-    --sunday-fg:#FBEEE7;
-    --focus:#A9762F;
+    --paper:#FFF4DD;
+    --card:#FFFCF5;
+    --ink:#3A2417;
+    --ink-soft:#806B5B;
+    --rule:#E8CFA8;
+    --brass:#D8892B;
+    --brass-deep:#B96518;
+    --brass-soft:#FFE2B5;
+    --sunday-bg:#B84A32;
+    --sunday-fg:#FFF3E8;
+    --focus:#D8892B;
   }
 
   *{box-sizing:border-box;}
@@ -117,7 +117,7 @@
   }
   .tab:hover:not(.active){
     color:var(--ink);
-    background:#EAD9AF;
+    background:#FFD79F;
   }
 
   .panel{
@@ -738,14 +738,15 @@
 const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
 /* ---- Login / auth token ---- */
-const AUTH_TOKEN_KEY = 'authToken';
+// Login token is kept only in the current page session.
+// It is NOT stored in localStorage, so a fresh opening requires login again.
 let sessionAuthToken = '';
 
 function getAuthToken(){
   return sessionAuthToken || '';
 }
 function setAuthToken(token){
-  sessionAuthToken = token || '';
+  sessionAuthToken = (typeof token === 'string') ? token : '';
 }
 function clearAuthToken(){
   sessionAuthToken = '';
@@ -754,35 +755,84 @@ function clearAuthToken(){
 /* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
 async function kvGet(key){
   try {
+    const token = getAuthToken();
+    if (!token) return null;
+
     const res = await fetch('/api/data?key=' + encodeURIComponent(key), {
-      headers: {'Authorization': 'Bearer ' + getAuthToken()}
+      headers: {'Authorization': 'Bearer ' + token}
     });
-    if (!res.ok) return null;
+
+    if (res.status === 401) {
+      clearAuthToken();
+      location.reload();
+      return null;
+    }
+    if (!res.ok) {
+      console.error('Load failed:', key, res.status);
+      return null;
+    }
+
     const data = await res.json();
     return data.value;
   } catch (e) {
+    console.error('Load error:', key, e);
     return null;
   }
 }
 async function kvSet(key, value){
   try {
+    const token = getAuthToken();
+    if (!token) {
+      setStatus('Login required');
+      return false;
+    }
+
     const res = await fetch('/api/data?key=' + encodeURIComponent(key), {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAuthToken()},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
       body: JSON.stringify({value})
     });
-    return res.ok;
+
+    if (res.status === 401) {
+      clearAuthToken();
+      location.reload();
+      return false;
+    }
+    if (!res.ok) {
+      console.error('Save failed:', key, res.status);
+      setStatus('Save failed');
+      return false;
+    }
+    return true;
   } catch (e) {
+    console.error('Save error:', key, e);
+    setStatus('Save failed');
     return false;
   }
 }
 async function kvDelete(key){
   try {
-    await fetch('/api/data?key=' + encodeURIComponent(key), {
+    const token = getAuthToken();
+    if (!token) return false;
+
+    const res = await fetch('/api/data?key=' + encodeURIComponent(key), {
       method: 'DELETE',
-      headers: {'Authorization': 'Bearer ' + getAuthToken()}
+      headers: {'Authorization': 'Bearer ' + token}
     });
-  } catch (e) {}
+
+    if (res.status === 401) {
+      clearAuthToken();
+      location.reload();
+      return false;
+    }
+    return res.ok;
+  } catch (e) {
+    console.error('Delete error:', key, e);
+    return false;
+  }
 }
 const DEFAULT_CLASS_OPTIONS = [
   '1BBA','2BBA','3BBA',
@@ -1776,7 +1826,6 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
 });
 
 (function startup(){
-  // Require login every time the page is opened/reloaded.
   clearAuthToken();
   loginOverlay.style.display = 'flex';
   appContent.style.display = 'none';
