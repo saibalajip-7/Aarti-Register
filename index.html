@@ -117,7 +117,7 @@
   }
   .tab:hover:not(.active){
     color:var(--ink);
-    background:#CDEBFF;
+    background:#EAD9AF;
   }
 
   .panel{
@@ -543,12 +543,7 @@
       white-space:pre-wrap;
     }
   }
-
-    .accent-teal{color:#0F766E}
-    .accent-purple{color:#7C3AED}
-    .accent-blue{color:#1769C2}
-    .accent-bg{background:linear-gradient(135deg,#EAF6FF 0%,#F5EEFF 100%)}
-    
+</style>
 </head>
 <body>
 <div id="loginOverlay" class="login-overlay">
@@ -744,18 +739,14 @@ const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
 /* ---- Login / auth token ---- */
 const AUTH_TOKEN_KEY = 'authToken';
-
 function getAuthToken(){
-  try { return sessionStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
+  try { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
 }
-
 function setAuthToken(token){
-  try { sessionStorage.setItem(AUTH_TOKEN_KEY, token || ''); } catch (e) {}
+  try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {}
 }
-
 function clearAuthToken(){
-  try { sessionStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
-} catch (e) {}
+  try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
 }
 
 /* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
@@ -1783,8 +1774,7 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
 });
 
 (function startup(){
-  const token = getAuthToken();
-  if (token) {
+  if (getAuthToken()){
     showApp();
   } else {
     loginOverlay.style.display = 'flex';
