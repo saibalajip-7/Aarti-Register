@@ -440,6 +440,58 @@
   .btn-apply{background:var(--ink);border:1px solid var(--ink);color:var(--paper);}
   .modal-error{font-size:12px;color:var(--sunday-bg);margin-top:8px;min-height:14px;}
 
+  .login-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:16px;
+  }
+  .login-box{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:28px 26px 22px;
+    width:100%;
+    max-width:340px;
+    box-shadow:0 14px 34px rgba(38,36,31,0.18);
+  }
+  .login-box h2{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 16px;
+  }
+  .login-box label{
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:10px 0 4px;
+  }
+  .login-box input{
+    width:100%;
+    font:inherit;
+    font-size:14px;
+    padding:9px 10px;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .login-box input:focus{
+    outline:none;
+    border-color:var(--focus);
+  }
+  .login-error{
+    font-size:12.5px;
+    color:var(--sunday-bg);
+    margin-top:10px;
+    min-height:16px;
+  }
+
   #printArea{display:none;}
 
   @media (max-width:520px){
@@ -494,6 +546,19 @@
 </style>
 </head>
 <body>
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-box">
+    <h2>Sign in</h2>
+    <label for="loginUsername">Username</label>
+    <input type="text" id="loginUsername" autocomplete="username">
+    <label for="loginPassword">Password</label>
+    <input type="password" id="loginPassword" autocomplete="current-password">
+    <div class="login-error" id="loginError">&nbsp;</div>
+    <button class="btn-apply" id="loginSubmit" style="width:100%;margin-top:12px;">Sign in</button>
+  </div>
+</div>
+
+<div id="appContent" style="display:none;">
 <button class="settings-btn" id="settingsBtn" title="Settings" aria-label="Settings">&#9881;</button>
 <div class="wrap">
   <header class="masthead">
@@ -636,6 +701,10 @@
         </div>
       </div>
     </div>
+
+    <div style="border-top:1px solid var(--rule);margin-top:18px;padding-top:16px;">
+      <button class="reset-btn" id="logoutBtn" style="width:100%;">Log out</button>
+    </div>
   </div>
 </div>
 
@@ -663,14 +732,29 @@
 </div>
 
 <div id="printArea"></div>
+</div>
 
 <script>
 const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
-/* ---- Shared storage: talks to /api/data, backed by Vercel KV ---- */
+/* ---- Login / auth token ---- */
+const AUTH_TOKEN_KEY = 'authToken';
+function getAuthToken(){
+  try { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
+}
+function setAuthToken(token){
+  try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {}
+}
+function clearAuthToken(){
+  try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
+}
+
+/* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
 async function kvGet(key){
   try {
-    const res = await fetch('/api/data?key=' + encodeURIComponent(key));
+    const res = await fetch('/api/data?key=' + encodeURIComponent(key), {
+      headers: {'Authorization': 'Bearer ' + getAuthToken()}
+    });
     if (!res.ok) return null;
     const data = await res.json();
     return data.value;
@@ -680,19 +764,22 @@ async function kvGet(key){
 }
 async function kvSet(key, value){
   try {
-    await fetch('/api/data?key=' + encodeURIComponent(key), {
+    const res = await fetch('/api/data?key=' + encodeURIComponent(key), {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAuthToken()},
       body: JSON.stringify({value})
     });
-    return true;
+    return res.ok;
   } catch (e) {
     return false;
   }
 }
 async function kvDelete(key){
   try {
-    await fetch('/api/data?key=' + encodeURIComponent(key), {method: 'DELETE'});
+    await fetch('/api/data?key=' + encodeURIComponent(key), {
+      method: 'DELETE',
+      headers: {'Authorization': 'Bearer ' + getAuthToken()}
+    });
   } catch (e) {}
 }
 const DEFAULT_CLASS_OPTIONS = [
@@ -1611,7 +1698,7 @@ document.getElementById('classResetDefault').addEventListener('click', async ()=
   renderTable();
 });
 
-(async function init(){
+async function initApp(){
   applyCalendarToUI();
 
   await Promise.all([loadClassOptions(), loadPrintNote(), loadCustomAcademicYearRange()]);
@@ -1634,6 +1721,65 @@ document.getElementById('classResetDefault').addEventListener('click', async ()=
   await loadHolidays();
   await loadSheet(currentSheet);
   renderTable();
+}
+
+/* ---- Login gate ---- */
+const loginOverlay = document.getElementById('loginOverlay');
+const appContent = document.getElementById('appContent');
+const loginUsername = document.getElementById('loginUsername');
+const loginPassword = document.getElementById('loginPassword');
+const loginError = document.getElementById('loginError');
+const loginSubmit = document.getElementById('loginSubmit');
+
+function showApp(){
+  loginOverlay.style.display = 'none';
+  appContent.style.display = 'block';
+  initApp();
+}
+
+async function attemptLogin(){
+  const username = loginUsername.value.trim();
+  const password = loginPassword.value;
+  if (!username || !password){
+    loginError.textContent = 'Enter both username and password.';
+    return;
+  }
+  loginError.textContent = 'Checking\u2026';
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    });
+    const data = await res.json();
+    if (res.ok && data.token){
+      setAuthToken(data.token);
+      loginError.textContent = '\u00A0';
+      showApp();
+    } else {
+      loginError.textContent = data.error || 'Incorrect username or password.';
+    }
+  } catch (e) {
+    loginError.textContent = 'Could not reach the server. Try again.';
+  }
+}
+
+loginSubmit.addEventListener('click', attemptLogin);
+loginPassword.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') attemptLogin(); });
+loginUsername.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') loginPassword.focus(); });
+
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  clearAuthToken();
+  location.reload();
+});
+
+(function startup(){
+  if (getAuthToken()){
+    showApp();
+  } else {
+    loginOverlay.style.display = 'flex';
+    appContent.style.display = 'none';
+  }
 })();
 </script>
 </body>
