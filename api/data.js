@@ -2,7 +2,21 @@ import { Redis } from '@upstash/redis';
 
 const redis = Redis.fromEnv();
 
+import { Redis } from '@upstash/redis';
+
+const redis = Redis.fromEnv();
+
+function isAuthorized(req){
+  const header = req.headers['authorization'] || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
+  return token && process.env.SHARED_TOKEN && token === process.env.SHARED_TOKEN;
+}
+
 export default async function handler(req, res) {
+  if (!isAuthorized(req)) {
+    return res.status(401).json({ error: 'Not authorized.' });
+  }
+
   const { key } = req.query;
 
   if (!key || typeof key !== 'string') {
