@@ -739,14 +739,16 @@ const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
 /* ---- Login / auth token ---- */
 const AUTH_TOKEN_KEY = 'authToken';
+let sessionAuthToken = '';
+
 function getAuthToken(){
-  try { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
+  return sessionAuthToken || '';
 }
 function setAuthToken(token){
-  try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {}
+  sessionAuthToken = token || '';
 }
 function clearAuthToken(){
-  try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
+  sessionAuthToken = '';
 }
 
 /* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
@@ -1774,12 +1776,10 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
 });
 
 (function startup(){
-  if (getAuthToken()){
-    showApp();
-  } else {
-    loginOverlay.style.display = 'flex';
-    appContent.style.display = 'none';
-  }
+  // Require login every time the page is opened/reloaded.
+  clearAuthToken();
+  loginOverlay.style.display = 'flex';
+  appContent.style.display = 'none';
 })();
 </script>
 </body>
