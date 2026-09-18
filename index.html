@@ -9,25 +9,28 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#E6E6E6;
-    --card:#F7F7F6;
-    --ink:#404E3B;
-    --ink-soft:#6C8480;
-    --rule:#D3D9CE;
-    --brass:#7B9669;
-    --brass-deep:#4E6042;
-    --brass-soft:#BAC8B1;
-    --sunday-bg:#F0C9C5;
-    --sunday-fg:#A13A2A;
-    --focus:#7B9669;
-    --accent-teal:#6C8480;
-    --accent-teal-deep:#48584F;
-    --accent-teal-soft:#D9E0DE;
-    --accent-violet:#B49B6C;
-    --accent-violet-deep:#7C6640;
-    --accent-violet-soft:#ECE4D3;
-    --accent-red:#A13A2A;
-    --accent-red-soft:#F0C9C5;
+    /* Sri Sathya Sai inspired palette: cream, maroon, gold and saffron.
+       No blue is used anywhere in the UI. Sundays remain clearly red. */
+    --paper:#F6EFE4;
+    --card:#FFFDF8;
+    --ink:#2D211D;
+    --ink-soft:#74645A;
+    --rule:#E2D2BE;
+    --brass:#D1A13A;
+    --brass-deep:#9B6814;
+    --brass-soft:#F3E1B8;
+    --sunday-bg:#B52A2A;
+    --sunday-fg:#FFF7F1;
+    --focus:#D87824;
+
+    --accent-teal:#B86C45;
+    --accent-teal-deep:#7B3E2A;
+    --accent-teal-soft:#F1D7C8;
+    --accent-violet:#8A4B55;
+    --accent-violet-deep:#632D38;
+    --accent-violet-soft:#EFDDE0;
+    --accent-red:#B52A2A;
+    --accent-red-soft:#F6D6D2;
   }
 
   *{box-sizing:border-box;}
@@ -46,15 +49,21 @@
   }
 
   header.masthead{
-    border-bottom:1px solid var(--rule);
-    padding-bottom:18px;
+    background:var(--ink);
+    color:#FFFDF8;
+    border-bottom:4px solid var(--brass);
+    padding:18px 20px 20px;
     margin-bottom:22px;
+    border-radius:12px;
+    box-shadow:0 5px 18px rgba(45,33,29,0.14);
     display:flex;
     align-items:flex-start;
     justify-content:space-between;
     flex-wrap:wrap;
     gap:8px;
   }
+  header.masthead::before{content:'';position:absolute;left:0;top:0;height:4px;width:100%;background:var(--brass);border-radius:12px 12px 0 0;}
+  header.masthead{position:relative;overflow:hidden;}
   header.masthead h1{
     font-family:'Fraunces', serif;
     font-weight:600;
@@ -64,7 +73,7 @@
   }
   header.masthead .range{
     font-size:13px;
-    color:var(--ink-soft);
+    color:#F2DCA4;
     font-variant-numeric:tabular-nums;
   }
   header.masthead .header-right{
@@ -84,13 +93,13 @@
     border-radius:50%;
     border:1px solid var(--rule);
     background:var(--card);
-    color:var(--ink-soft);
+    color:var(--accent-red);
     font-size:18px;
     display:flex;
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    box-shadow:0 1px 3px rgba(84,79,73,0.08);
+    box-shadow:0 2px 8px rgba(45,33,29,0.12);
     transition:color .15s ease, border-color .15s ease, transform .15s ease;
   }
   .settings-btn:hover{
@@ -111,7 +120,7 @@
     font-weight:600;
     padding:10px 22px 9px;
     background:var(--brass-soft);
-    color:var(--ink-soft);
+    color:var(--ink);
     border:none;
     border-radius:9px 9px 0 0;
     cursor:pointer;
@@ -126,15 +135,16 @@
   }
   .tab:hover:not(.active){
     color:var(--ink);
-    background:#EAD9AF;
+    background:#F0D08A;
   }
 
   .panel{
     background:var(--card);
     border:1px solid var(--rule);
+    border-top:4px solid var(--brass);
     border-radius:0 10px 10px 10px;
     padding:18px;
-    box-shadow:0 1px 2px rgba(84,79,73,0.05);
+    box-shadow:0 3px 10px rgba(45,33,29,0.07);
   }
 
   .toolbar{
@@ -154,8 +164,8 @@
     font-weight:600;
     padding:15px 20px;
     margin-bottom:16px;
-    background:var(--brass);
-    color:#fff;
+    background:linear-gradient(135deg,var(--brass),#E1B64E);
+    color:#2D211D;
     border:none;
     border-radius:9px;
     cursor:pointer;
@@ -164,6 +174,7 @@
   }
   button.summary-btn:hover{
     background:var(--brass-deep);
+    color:#fff;
   }
 
   .months{
@@ -187,9 +198,9 @@
     transition:background .15s ease, color .15s ease;
   }
   .month-pill.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--paper);
+    background:var(--accent-red);
+    border-color:var(--accent-red);
+    color:#fff;
   }
 
   .weeks{
@@ -214,9 +225,9 @@
     transition:background .15s ease, color .15s ease;
   }
   .week-pill.active{
-    background:var(--brass-deep);
-    border-color:var(--brass-deep);
-    color:var(--card);
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--brass-soft);
   }
 
   .status{
@@ -302,8 +313,8 @@
   thead th{
     position:sticky;
     top:0;
-    background:var(--rule);
-    color:var(--ink);
+    background:var(--ink);
+    color:#FFFDF8;
     text-align:left;
     padding:10px 10px;
     font-weight:600;
@@ -341,8 +352,8 @@
     background:var(--card);
     color:var(--ink);
   }
-  tr.sunday input.name-input::placeholder{color:#D19790;}
-  input.name-input::placeholder{color:#AEB6A8;}
+  tr.sunday input.name-input::placeholder{color:#D88D86;}
+  input.name-input::placeholder{color:#B9A79B;}
 
   select.class-select{
     width:100%;
@@ -355,7 +366,7 @@
     cursor:pointer;
   }
   tr.sunday select.class-select{
-    border-color:#DFA8A2;
+    border-color:#D99089;
   }
   select.class-select:focus{outline:none;border-color:var(--focus);}
 
@@ -419,7 +430,7 @@
 
   /* Fill-range modal */
   .modal-overlay{
-    position:fixed;inset:0;background:rgba(84,79,73,0.32);
+    position:fixed;inset:0;background:rgba(45,33,29,0.45);
     display:flex;align-items:center;justify-content:center;
     z-index:50;padding:16px;
   }
@@ -431,10 +442,11 @@
     width:100%;max-width:360px;
     max-height:88vh;
     overflow-y:auto;
-    box-shadow:0 10px 28px rgba(84,79,73,0.14);
+    box-shadow:0 12px 30px rgba(45,33,29,0.18);
   }
   .modal h2{
     font-family:'Fraunces', serif;
+    color:var(--accent-red);
     font-size:18px;font-weight:600;margin:0 0 14px;
   }
   .modal label{
@@ -453,13 +465,13 @@
     font:inherit;font-size:13px;padding:7px 17px;border-radius:7px;cursor:pointer;
   }
   .btn-cancel{background:none;border:1px solid var(--rule);color:var(--ink-soft);}
-  .btn-apply{background:var(--ink);border:1px solid var(--ink);color:var(--paper);}
+  .btn-apply{background:var(--accent-red);border:1px solid var(--accent-red);color:#fff;}
   .modal-error{font-size:12px;color:var(--sunday-bg);margin-top:8px;min-height:14px;}
 
   .login-overlay{
     position:fixed;
     inset:0;
-    background:var(--paper);
+    background:linear-gradient(135deg,#F6EFE4 0%,#F4E0C6 55%,#E8B45C 100%);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -468,15 +480,17 @@
   }
   .login-box{
     background:var(--card);
+    border-top:5px solid var(--accent-red);
     border:1px solid var(--rule);
     border-radius:12px;
     padding:38px 34px 30px;
     width:100%;
     max-width:420px;
-    box-shadow:0 10px 28px rgba(84,79,73,0.12);
+    box-shadow:0 12px 30px rgba(45,33,29,0.18);
   }
   .login-box h2{
     font-family:'Fraunces', serif;
+    color:var(--accent-red);
     font-size:24px;
     font-weight:600;
     margin:0 0 20px;
@@ -532,12 +546,12 @@
       font-size:20px;font-weight:600;margin:0 0 2px;
     }
     #printArea .print-sub{
-      font-size:12px;color:#6C8480;margin-bottom:14px;
+      font-size:12px;color:#8A6A5A;margin-bottom:14px;
     }
     #printArea .print-page{
       margin-bottom:22px;
       padding-bottom:16px;
-      border-bottom:1px solid #ccc;
+      border-bottom:1px solid #D8C8B9;
     }
     #printArea .print-page:last-of-type{
       border-bottom:none;
@@ -545,17 +559,17 @@
     }
     #printArea table{width:100%;border-collapse:collapse;font-size:12px;}
     #printArea th{
-      text-align:left;border-bottom:1.5px solid #404E3B;padding:6px 8px;
+      text-align:left;border-bottom:1.5px solid #5C463C;padding:6px 8px;
     }
-    #printArea td{padding:5px 8px;border-bottom:1px solid #ddd;}
-    #printArea tr.sunday td{background:#F0C9C5 !important;color:#A13A2A !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    #printArea td{padding:5px 8px;border-bottom:1px solid #E5D9CE;}
+    #printArea tr.sunday td{background:#B52A2A !important;color:#FFF7F1 !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     #printArea tr.trayee-pair-end td{border-bottom:1.5px solid #999;}
     #printArea .print-note{
       margin-top:18px;
       padding-top:10px;
       border-top:1px dashed #999;
       font-size:12px;
-      color:#404E3B;
+      color:#5C463C;
       white-space:pre-wrap;
     }
   }
