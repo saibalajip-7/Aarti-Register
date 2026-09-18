@@ -1,10 +1,10 @@
 import { Redis } from '@upstash/redis';
 
-const redis = Redis.fromEnv();
-
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
+let redis;
+function getRedis(){
+  if (!redis) redis = Redis.fromEnv();
+  return redis;
+}
 
 function isAuthorized(req){
   const header = req.headers['authorization'] || '';
@@ -24,6 +24,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    const redis = getRedis();
+
     if (req.method === 'GET') {
       const value = await redis.get(key);
       return res.status(200).json({ value: value === undefined ? null : value });
