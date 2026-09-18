@@ -9,25 +9,25 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#F3F1ED;
-    --card:#FAF9F6;
-    --ink:#2B2723;
-    --ink-soft:#6E6659;
-    --rule:#E6E1D9;
-    --brass:#96AABD;
-    --brass-deep:#3F5C72;
-    --brass-soft:#E4EBF0;
-    --sunday-bg:#EEDCCB;
-    --sunday-fg:#8A5730;
-    --focus:#96AABD;
-    --accent-teal:#8FB6AA;
-    --accent-teal-deep:#3E6459;
-    --accent-teal-soft:#E4EEEB;
-    --accent-violet:#B39FC0;
-    --accent-violet-deep:#5E4A6B;
-    --accent-violet-soft:#EFE9F2;
-    --accent-red:#9C4F3F;
-    --accent-red-soft:#F2E5E2;
+    --paper:#E6E6E6;
+    --card:#F7F7F6;
+    --ink:#404E3B;
+    --ink-soft:#6C8480;
+    --rule:#D3D9CE;
+    --brass:#7B9669;
+    --brass-deep:#4E6042;
+    --brass-soft:#BAC8B1;
+    --sunday-bg:#F0C9C5;
+    --sunday-fg:#A13A2A;
+    --focus:#7B9669;
+    --accent-teal:#6C8480;
+    --accent-teal-deep:#48584F;
+    --accent-teal-soft:#D9E0DE;
+    --accent-violet:#B49B6C;
+    --accent-violet-deep:#7C6640;
+    --accent-violet-soft:#ECE4D3;
+    --accent-red:#A13A2A;
+    --accent-red-soft:#F0C9C5;
   }
 
   *{box-sizing:border-box;}
@@ -341,8 +341,8 @@
     background:var(--card);
     color:var(--ink);
   }
-  tr.sunday input.name-input::placeholder{color:#C99A80;}
-  input.name-input::placeholder{color:#BDB6AC;}
+  tr.sunday input.name-input::placeholder{color:#D19790;}
+  input.name-input::placeholder{color:#AEB6A8;}
 
   select.class-select{
     width:100%;
@@ -355,7 +355,7 @@
     cursor:pointer;
   }
   tr.sunday select.class-select{
-    border-color:#E0B49C;
+    border-color:#DFA8A2;
   }
   select.class-select:focus{outline:none;border-color:var(--focus);}
 
@@ -532,7 +532,7 @@
       font-size:20px;font-weight:600;margin:0 0 2px;
     }
     #printArea .print-sub{
-      font-size:12px;color:#6E6659;margin-bottom:14px;
+      font-size:12px;color:#6C8480;margin-bottom:14px;
     }
     #printArea .print-page{
       margin-bottom:22px;
@@ -545,17 +545,17 @@
     }
     #printArea table{width:100%;border-collapse:collapse;font-size:12px;}
     #printArea th{
-      text-align:left;border-bottom:1.5px solid #2B2723;padding:6px 8px;
+      text-align:left;border-bottom:1.5px solid #404E3B;padding:6px 8px;
     }
     #printArea td{padding:5px 8px;border-bottom:1px solid #ddd;}
-    #printArea tr.sunday td{background:#EEDCCB !important;color:#8A5730 !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    #printArea tr.sunday td{background:#F0C9C5 !important;color:#A13A2A !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     #printArea tr.trayee-pair-end td{border-bottom:1.5px solid #999;}
     #printArea .print-note{
       margin-top:18px;
       padding-top:10px;
       border-top:1px dashed #999;
       font-size:12px;
-      color:#2B2723;
+      color:#404E3B;
       white-space:pre-wrap;
     }
   }
