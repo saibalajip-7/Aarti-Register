@@ -9,25 +9,25 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#F7F5F2;
-    --card:#FFFFFF;
-    --ink:#3F3B38;
-    --ink-soft:#8A8378;
-    --rule:#E8E3DC;
-    --brass:#6F8FAE;
-    --brass-deep:#4F718F;
-    --brass-soft:#DCE7F0;
-    --sunday-bg:#F3CBBB;
-    --sunday-fg:#A2522F;
-    --focus:#6F8FAE;
-    --accent-teal:#4F9C8C;
-    --accent-teal-deep:#397569;
-    --accent-teal-soft:#D7ECE7;
-    --accent-violet:#9B72AA;
-    --accent-violet-deep:#7A5389;
-    --accent-violet-soft:#EFE3F2;
-    --accent-red:#C15C4C;
-    --accent-red-soft:#F5DFDA;
+    --paper:#F3F1ED;
+    --card:#FAF9F6;
+    --ink:#2B2723;
+    --ink-soft:#6E6659;
+    --rule:#E6E1D9;
+    --brass:#96AABD;
+    --brass-deep:#3F5C72;
+    --brass-soft:#E4EBF0;
+    --sunday-bg:#EEDCCB;
+    --sunday-fg:#8A5730;
+    --focus:#96AABD;
+    --accent-teal:#8FB6AA;
+    --accent-teal-deep:#3E6459;
+    --accent-teal-soft:#E4EEEB;
+    --accent-violet:#B39FC0;
+    --accent-violet-deep:#5E4A6B;
+    --accent-violet-soft:#EFE9F2;
+    --accent-red:#9C4F3F;
+    --accent-red-soft:#F2E5E2;
   }
 
   *{box-sizing:border-box;}
@@ -46,7 +46,7 @@
   }
 
   header.masthead{
-    border-bottom:2px solid var(--ink);
+    border-bottom:1px solid var(--rule);
     padding-bottom:18px;
     margin-bottom:22px;
     display:flex;
@@ -90,7 +90,7 @@
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    box-shadow:0 1px 4px rgba(38,36,31,0.12);
+    box-shadow:0 1px 3px rgba(84,79,73,0.08);
     transition:color .15s ease, border-color .15s ease, transform .15s ease;
   }
   .settings-btn:hover{
@@ -134,7 +134,7 @@
     border:1px solid var(--rule);
     border-radius:0 10px 10px 10px;
     padding:18px;
-    box-shadow:0 1px 2px rgba(38,36,31,0.04);
+    box-shadow:0 1px 2px rgba(84,79,73,0.05);
   }
 
   .toolbar{
@@ -302,11 +302,11 @@
   thead th{
     position:sticky;
     top:0;
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--rule);
+    color:var(--ink);
     text-align:left;
     padding:10px 10px;
-    font-weight:500;
+    font-weight:600;
     font-size:11.5px;
     text-transform:uppercase;
     letter-spacing:0.05em;
@@ -419,7 +419,7 @@
 
   /* Fill-range modal */
   .modal-overlay{
-    position:fixed;inset:0;background:rgba(38,36,31,0.45);
+    position:fixed;inset:0;background:rgba(84,79,73,0.32);
     display:flex;align-items:center;justify-content:center;
     z-index:50;padding:16px;
   }
@@ -431,7 +431,7 @@
     width:100%;max-width:360px;
     max-height:88vh;
     overflow-y:auto;
-    box-shadow:0 14px 34px rgba(38,36,31,0.25);
+    box-shadow:0 10px 28px rgba(84,79,73,0.14);
   }
   .modal h2{
     font-family:'Fraunces', serif;
@@ -473,7 +473,7 @@
     padding:38px 34px 30px;
     width:100%;
     max-width:420px;
-    box-shadow:0 14px 34px rgba(38,36,31,0.18);
+    box-shadow:0 10px 28px rgba(84,79,73,0.12);
   }
   .login-box h2{
     font-family:'Fraunces', serif;
@@ -532,7 +532,7 @@
       font-size:20px;font-weight:600;margin:0 0 2px;
     }
     #printArea .print-sub{
-      font-size:12px;color:#8A8378;margin-bottom:14px;
+      font-size:12px;color:#6E6659;margin-bottom:14px;
     }
     #printArea .print-page{
       margin-bottom:22px;
@@ -545,17 +545,17 @@
     }
     #printArea table{width:100%;border-collapse:collapse;font-size:12px;}
     #printArea th{
-      text-align:left;border-bottom:1.5px solid #3F3B38;padding:6px 8px;
+      text-align:left;border-bottom:1.5px solid #2B2723;padding:6px 8px;
     }
     #printArea td{padding:5px 8px;border-bottom:1px solid #ddd;}
-    #printArea tr.sunday td{background:#F3CBBB !important;color:#A2522F !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    #printArea tr.sunday td{background:#EEDCCB !important;color:#8A5730 !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     #printArea tr.trayee-pair-end td{border-bottom:1.5px solid #999;}
     #printArea .print-note{
       margin-top:18px;
       padding-top:10px;
       border-top:1px dashed #999;
       font-size:12px;
-      color:#3F3B38;
+      color:#2B2723;
       white-space:pre-wrap;
     }
   }
