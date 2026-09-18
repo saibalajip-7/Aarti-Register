@@ -8,17 +8,25 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
 
   :root{
-    --paper:#F7F1E4;
-    --card:#FFFDF8;
-    --ink:#26241F;
-    --ink-soft:#7A7469;
-    --rule:#E3D8BF;
-    --brass:#A9762F;
-    --brass-deep:#8A5F24;
-    --brass-soft:#F1E3C4;
-    --sunday-bg:#8C3327;
-    --sunday-fg:#FBEEE7;
-    --focus:#A9762F;
+    --paper:#F2F8FF;
+    --card:#FFFFFF;
+    --ink:#1F2A3C;
+    --ink-soft:#66798F;
+    --rule:#D8E7F7;
+    --brass:#2F80ED;
+    --brass-deep:#1C63C8;
+    --brass-soft:#DCEBFF;
+    --sunday-bg:#FF3D81;
+    --sunday-fg:#FFFFFF;
+    --focus:#2F80ED;
+    --accent-teal:#0EA5A5;
+    --accent-teal-deep:#0B7D7D;
+    --accent-teal-soft:#D3F5F0;
+    --accent-violet:#8B5CF6;
+    --accent-violet-deep:#6D28D9;
+    --accent-violet-soft:#EDE7FE;
+    --accent-red:#F43F5E;
+    --accent-red-soft:#FFE1E6;
   }
 
   *{box-sizing:border-box;}
@@ -145,8 +153,8 @@
     font-weight:600;
     padding:15px 20px;
     margin-bottom:16px;
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--brass);
+    color:#fff;
     border:none;
     border-radius:9px;
     cursor:pointer;
@@ -388,18 +396,25 @@
     padding:7px 14px;
     border-radius:7px;
     cursor:pointer;
-    transition:border-color .15s ease, color .15s ease;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
   }
-  button.reset-btn:hover{background:var(--sunday-bg);border-color:var(--sunday-bg);color:var(--sunday-fg);}
   button.reset-btn{
-    border-color:var(--sunday-bg);
-    color:var(--sunday-bg);
+    border-color:var(--accent-red);
+    color:var(--accent-red);
   }
-  button.fill-btn, button.print-btn{
-    border-color:var(--brass);
-    color:var(--brass-deep);
+  button.reset-btn:hover{background:var(--accent-red);border-color:var(--accent-red);color:#fff;}
+
+  button.fill-btn{
+    border-color:var(--accent-violet);
+    color:var(--accent-violet-deep);
   }
-  button.fill-btn:hover, button.print-btn:hover{background:var(--brass-soft);}
+  button.fill-btn:hover{background:var(--accent-violet-soft);}
+
+  button.print-btn{
+    border-color:var(--accent-teal);
+    color:var(--accent-teal-deep);
+  }
+  button.print-btn:hover{background:var(--accent-teal-soft);}
 
   /* Fill-range modal */
   .modal-overlay{
@@ -516,7 +531,7 @@
       font-size:20px;font-weight:600;margin:0 0 2px;
     }
     #printArea .print-sub{
-      font-size:12px;color:#7A7469;margin-bottom:14px;
+      font-size:12px;color:#9C7B5C;margin-bottom:14px;
     }
     #printArea .print-page{
       margin-bottom:22px;
@@ -529,17 +544,17 @@
     }
     #printArea table{width:100%;border-collapse:collapse;font-size:12px;}
     #printArea th{
-      text-align:left;border-bottom:1.5px solid #1A1A1A;padding:6px 8px;
+      text-align:left;border-bottom:1.5px solid #3D2B1F;padding:6px 8px;
     }
     #printArea td{padding:5px 8px;border-bottom:1px solid #ddd;}
-    #printArea tr.sunday td{background:#FDEBEA !important;color:#B3261E !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    #printArea tr.sunday td{background:#FFE3D6 !important;color:#D9481F !important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     #printArea tr.trayee-pair-end td{border-bottom:1.5px solid #999;}
     #printArea .print-note{
       margin-top:18px;
       padding-top:10px;
       border-top:1px dashed #999;
       font-size:12px;
-      color:#26241F;
+      color:#3D2B1F;
       white-space:pre-wrap;
     }
   }
@@ -738,16 +753,13 @@
 const SHEETS = ['Hostel', 'Ramesh Hall', 'Trayee'];
 
 /* ---- Login / auth token ---- */
-const AUTH_TOKEN_KEY = 'authToken';
-function getAuthToken(){
-  try { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) { return ''; }
-}
-function setAuthToken(token){
-  try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {}
-}
-function clearAuthToken(){
-  try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
-}
+// Kept only in memory (not localStorage/sessionStorage) so a fresh login is
+// required on every page load or reload \u2014 the actual register data still
+// loads fully from the shared server regardless, since that's stored separately.
+let inMemoryAuthToken = '';
+function getAuthToken(){ return inMemoryAuthToken; }
+function setAuthToken(token){ inMemoryAuthToken = token; }
+function clearAuthToken(){ inMemoryAuthToken = ''; }
 
 /* ---- Shared storage: talks to /api/data, backed by Upstash Redis ---- */
 async function kvGet(key){
