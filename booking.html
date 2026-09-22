@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Slot &mdash; Aarti</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#F6EFE4;
+    --card:#FFFDF8;
+    --ink:#2D211D;
+    --ink-soft:#74645A;
+    --rule:#E2D2BE;
+    --brass:#D1A13A;
+    --brass-deep:#9B6814;
+    --brass-soft:#F3E1B8;
+    --sunday-bg:#B52A2A;
+    --sunday-fg:#FFF7F1;
+    --focus:#D87824;
+    --green:#2E7D32;
+    --green-deep:#1B5E20;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 60px;}
+
+  header.masthead{
+    background:#5A4438;
+    color:#FFFDF8;
+    border-bottom:4px solid var(--brass);
+    padding:16px 20px 18px;
+    margin-bottom:22px;
+    border-radius:12px;
+    box-shadow:0 5px 18px rgba(45,33,29,0.14);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  header.masthead h1{
+    margin:0;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:0.2px;
+  }
+  header.masthead .sub{
+    font-size:12.5px;
+    color:#EADFCF;
+    margin-top:3px;
+  }
+  .back-link{
+    color:#FFFDF8;
+    text-decoration:none;
+    font-size:13px;
+    border:1px solid rgba(255,255,255,0.35);
+    padding:7px 14px;
+    border-radius:8px;
+    transition:background .15s ease;
+    white-space:nowrap;
+  }
+  .back-link:hover{background:rgba(255,255,255,0.12);}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:14px;
+    padding:20px 22px 22px;
+    margin-bottom:20px;
+    box-shadow:0 4px 14px rgba(45,33,29,0.08);
+  }
+
+  .cal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .cal-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:18px;
+    color:var(--brass-deep);
+  }
+  .cal-nav{display:flex;gap:8px;}
+  .cal-nav button{
+    background:none;
+    border:1px solid var(--rule);
+    color:var(--ink);
+    width:34px;height:34px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:background .15s ease, opacity .15s ease;
+  }
+  .cal-nav button:hover:not(:disabled){background:var(--brass-soft);}
+  .cal-nav button:disabled{opacity:0.35;cursor:default;}
+
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:6px;
+  }
+  .cal-dow{
+    text-align:center;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    padding-bottom:4px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .cal-cell{
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    font-size:13.5px;
+    position:relative;
+  }
+  .cal-cell.empty{visibility:hidden;}
+  .cal-cell.day{
+    background:var(--paper);
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+  }
+  .cal-cell.day.sunday{color:var(--sunday-bg);}
+  .cal-cell.day.available{
+    background:#FFFDF8;
+    border:1px solid var(--brass);
+    color:var(--ink);
+    cursor:pointer;
+    font-weight:600;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .cal-cell.day.available:hover{background:var(--brass-soft);transform:translateY(-1px);}
+  .cal-cell.day.available.sunday{border-color:var(--sunday-bg);color:var(--sunday-bg);}
+  .cal-cell.day.today{box-shadow:0 0 0 2px var(--focus) inset;}
+  .cal-cell.day.unavailable{
+    background:#EFE6D8;
+    color:#B7A991;
+    cursor:not-allowed;
+    text-decoration:line-through;
+  }
+
+  .legend{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-top:14px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend .dot{width:11px;height:11px;border-radius:4px;display:inline-block;}
+  .dot.available{background:#FFFDF8;border:1px solid var(--brass);}
+  .dot.unavailable{background:#EFE6D8;border:1px solid #D8CBB6;}
+  .dot.sunday{background:#FFFDF8;border:1px solid var(--sunday-bg);}
+
+  .loading, .cal-empty{font-size:13.5px;color:var(--ink-soft);padding:10px 2px;}
+
+  /* ---- Modal ---- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(45,33,29,0.45);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    z-index:50;
+  }
+  .modal-overlay.hidden{display:none;}
+  .modal{
+    background:var(--card);
+    border-radius:14px;
+    padding:24px 24px 22px;
+    width:100%;
+    max-width:420px;
+    box-shadow:0 12px 40px rgba(45,33,29,0.28);
+  }
+  .modal h2{
+    margin:0 0 4px;
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    color:var(--brass-deep);
+  }
+  .modal .modal-sub{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .field input, .field select{
+    width:100%;
+    font:inherit;
+    font-size:14.5px;
+    padding:10px 12px;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--focus);outline-offset:1px;}
+  .modal-error{
+    font-size:12.5px;
+    color:var(--sunday-bg);
+    min-height:16px;
+    margin-bottom:8px;
+  }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:6px;
+  }
+  .btn-cancel{
+    background:none;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .btn-cancel:hover{background:var(--paper);}
+  .btn-book{
+    background:var(--green);
+    border:1px solid var(--green-deep);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .btn-book:hover{background:var(--green-deep);}
+  .btn-book:disabled{opacity:0.5;cursor:not-allowed;}
+
+  .success-icon{
+    width:52px;height:52px;border-radius:50%;
+    background:var(--green);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+    margin:0 auto 14px;
+  }
+  .modal.success{text-align:center;}
+  .modal.success .modal-sub{margin-bottom:20px;}
+
+  @media (max-width:480px){
+    .cal-cell{font-size:12px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1>Book a Visiting Slot</h1>
+      <div class="sub">Student register for Aarti</div>
+    </div>
+    <a class="back-link" href="index.html">&larr; Back</a>
+  </header>
+
+  <div class="card">
+    <div class="cal-header">
+      <div class="cal-nav"><button id="prevMonthBtn" aria-label="Previous month">&#8249;</button></div>
+      <div class="cal-title" id="calTitle">&nbsp;</div>
+      <div class="cal-nav"><button id="nextMonthBtn" aria-label="Next month">&#8250;</button></div>
+    </div>
+    <div id="calBody">
+      <div class="loading">Loading calendar&hellip;</div>
+    </div>
+    <div class="legend">
+      <span><span class="dot available"></span> Available</span>
+      <span><span class="dot unavailable"></span> Fully booked / unavailable</span>
+      <span><span class="dot sunday"></span> Sunday</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="bookingModal">
+  <div class="modal">
+    <h2>Book a slot</h2>
+    <div class="modal-sub" id="bookingDateLabel"></div>
+    <div class="field">
+      <label for="bkName">Name</label>
+      <input type="text" id="bkName" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="bkClass">Class</label>
+      <select id="bkClass"></select>
+    </div>
+    <div class="field">
+      <label for="bkPhone">Phone number</label>
+      <input type="tel" id="bkPhone" autocomplete="tel">
+    </div>
+    <div class="field">
+      <label for="bkLocation">Location</label>
+      <select id="bkLocation"></select>
+    </div>
+    <div class="modal-error" id="bookingError">&nbsp;</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="bookingCancel">Cancel</button>
+      <button class="btn-book" id="bookingSubmit">Book Slot</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="successModal">
+  <div class="modal success">
+    <div class="success-icon">&#10003;</div>
+    <h2>Request sent</h2>
+    <div class="modal-sub">Your slot request has been sent for approval. You'll be confirmed once the admin approves it.</div>
+    <div class="modal-actions" style="justify-content:center;">
+      <button class="btn-book" id="successClose">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const LOCATIONS = ['Hostel', 'Ramesh Hall', 'Trayee'];
+const DEFAULT_CLASS_OPTIONS = [
+  '1BBA','2BBA','3BBA',
+  '1B-COM','2B-COM','3B-COM',
+  '1ADS','2ADS','3ADS',
+  '1FEDA','2FEDA','3FEDA',
+  '1BA-ECO','2BA-ECO','3BA-ECO',
+  '1MBA','2MBA',
+  '1MA','2MA',
+  '4 Yr'
+];
+
+function dateKey(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(d){
+  return String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear();
+}
+
+let meta = null; // { yearLabel, rangeStart, rangeEnd, classOptions, holidayDates, availability }
+let holidaySet = new Set();
+let availabilitySets = {}; // location -> Set of occupied date keys
+let rangeStart = null, rangeEnd = null, today = null;
+let viewYear = 0, viewMonth = 0; // calendar being shown
+
+function dayAllowedForLocation(location, d){
+  if (location === 'Trayee') return d.getDay() === 0 || d.getDay() === 4;
+  return true;
+}
+
+function availableLocationsForDate(d){
+  const key = dateKey(d);
+  if (holidaySet.has(key)) return [];
+  if (d < rangeStart || d > rangeEnd) return [];
+  const out = [];
+  LOCATIONS.forEach(loc=>{
+    if (!dayAllowedForLocation(loc, d)) return;
+    if (availabilitySets[loc] && availabilitySets[loc].has(key)) return;
+    out.push(loc);
+  });
+  return out;
+}
+
+async function loadMeta(){
+  const res = await fetch('/api/bookings?action=meta');
+  if (!res.ok) throw new Error('Could not load booking calendar.');
+  const data = await res.json();
+  meta = data;
+  holidaySet = new Set(data.holidayDates || []);
+  availabilitySets = {};
+  LOCATIONS.forEach(loc=>{
+    availabilitySets[loc] = new Set((data.availability && data.availability[loc]) || []);
+  });
+  rangeStart = new Date(data.rangeStart + 'T00:00:00');
+  rangeEnd = new Date(data.rangeEnd + 'T00:00:00');
+}
+
+const calTitle = document.getElementById('calTitle');
+const calBody = document.getElementById('calBody');
+const prevMonthBtn = document.getElementById('prevMonthBtn');
+const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+function renderCalendar(){
+  calTitle.textContent = MONTH_NAMES[viewMonth] + ' ' + viewYear;
+
+  const monthStart = new Date(viewYear, viewMonth, 1);
+  const monthEnd = new Date(viewYear, viewMonth + 1, 0);
+  const prevPossible = new Date(viewYear, viewMonth, 0) >= new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
+  const nextPossible = new Date(viewYear, viewMonth + 1, 1) <= rangeEnd;
+  prevMonthBtn.disabled = !prevPossible;
+  nextMonthBtn.disabled = !nextPossible;
+
+  const frag = document.createDocumentFragment();
+  const grid = document.createElement('div');
+  grid.className = 'cal-grid';
+
+  DAY_NAMES.forEach(name=>{
+    const el = document.createElement('div');
+    el.className = 'cal-dow';
+    el.textContent = name;
+    grid.appendChild(el);
+  });
+
+  const leadingBlanks = monthStart.getDay();
+  for (let i=0;i<leadingBlanks;i++){
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    grid.appendChild(el);
+  }
+
+  for (let day=1; day<=monthEnd.getDate(); day++){
+    const d = new Date(viewYear, viewMonth, day);
+    const isSunday = d.getDay() === 0;
+    const isToday = dateKey(d) === dateKey(today);
+    const inRange = d >= rangeStart && d <= rangeEnd && d >= today;
+    const locs = inRange ? availableLocationsForDate(d) : [];
+    const isAvailable = inRange && locs.length > 0;
+
+    const el = document.createElement('div');
+    el.className = 'cal-cell day' + (isSunday ? ' sunday' : '') + (isToday ? ' today' : '') + (isAvailable ? ' available' : ' unavailable');
+    el.textContent = String(day);
+
+    if (isAvailable){
+      el.addEventListener('click', ()=> openBookingForm(d, locs));
+    }
+    grid.appendChild(el);
+  }
+
+  calBody.innerHTML = '';
+  frag.appendChild(grid);
+  calBody.appendChild(frag);
+}
+
+prevMonthBtn.addEventListener('click', ()=>{
+  viewMonth -= 1;
+  if (viewMonth < 0){ viewMonth = 11; viewYear -= 1; }
+  renderCalendar();
+});
+nextMonthBtn.addEventListener('click', ()=>{
+  viewMonth += 1;
+  if (viewMonth > 11){ viewMonth = 0; viewYear += 1; }
+  renderCalendar();
+});
+
+/* ---- Booking form modal ---- */
+const bookingModal = document.getElementById('bookingModal');
+const bookingDateLabel = document.getElementById('bookingDateLabel');
+const bkName = document.getElementById('bkName');
+const bkClass = document.getElementById('bkClass');
+const bkPhone = document.getElementById('bkPhone');
+const bkLocation = document.getElementById('bkLocation');
+const bookingError = document.getElementById('bookingError');
+const bookingSubmit = document.getElementById('bookingSubmit');
+const bookingCancel = document.getElementById('bookingCancel');
+
+let selectedDateKey = null;
+
+function openBookingForm(d, locs){
+  selectedDateKey = dateKey(d);
+  bookingDateLabel.textContent = fmtDate(d) + ' (' + DAY_NAMES[d.getDay()] + ')';
+  bkName.value = '';
+  bkPhone.value = '';
+  bookingError.textContent = '\u00A0';
+
+  bkClass.innerHTML = '';
+  const blank = document.createElement('option');
+  blank.value = ''; blank.textContent = '\u2014';
+  bkClass.appendChild(blank);
+  const classOptions = (meta && Array.isArray(meta.classOptions) && meta.classOptions.length) ? meta.classOptions : DEFAULT_CLASS_OPTIONS;
+  classOptions.forEach(c=>{
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    bkClass.appendChild(o);
+  });
+
+  bkLocation.innerHTML = '';
+  locs.forEach(loc=>{
+    const o = document.createElement('option');
+    o.value = loc; o.textContent = loc;
+    bkLocation.appendChild(o);
+  });
+
+  bookingModal.classList.remove('hidden');
+  bkName.focus();
+}
+
+bookingCancel.addEventListener('click', ()=> bookingModal.classList.add('hidden'));
+bookingModal.addEventListener('click', (e)=>{ if (e.target === bookingModal) bookingModal.classList.add('hidden'); });
+
+bookingSubmit.addEventListener('click', async ()=>{
+  const name = bkName.value.trim();
+  const className = bkClass.value;
+  const phone = bkPhone.value.trim();
+  const location = bkLocation.value;
+
+  if (!name){ bookingError.textContent = 'Please enter a name.'; return; }
+  if (!phone){ bookingError.textContent = 'Please enter a phone number.'; return; }
+  if (!location){ bookingError.textContent = 'Please choose a location.'; return; }
+
+  bookingSubmit.disabled = true;
+  bookingError.textContent = 'Sending\u2026';
+  try {
+    const res = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name, class: className, phone, location,
+        date: selectedDateKey,
+        yearLabel: meta.yearLabel
+      })
+    });
+    const data = await res.json();
+    if (res.ok && data.success){
+      bookingModal.classList.add('hidden');
+      document.getElementById('successModal').classList.remove('hidden');
+      await refreshAvailability();
+    } else {
+      bookingError.textContent = data.error || 'Could not send the request. Please try again.';
+    }
+  } catch (e) {
+    bookingError.textContent = 'Could not reach the server. Please try again.';
+  } finally {
+    bookingSubmit.disabled = false;
+  }
+});
+
+document.getElementById('successClose').addEventListener('click', ()=>{
+  document.getElementById('successModal').classList.add('hidden');
+});
+
+async function refreshAvailability(){
+  try {
+    await loadMeta();
+    renderCalendar();
+  } catch (e) { /* keep showing the last known state */ }
+}
+
+async function init(){
+  today = new Date();
+  today.setHours(0,0,0,0);
+  try {
+    await loadMeta();
+  } catch (e) {
+    calBody.innerHTML = '<div class="cal-empty">Could not load the booking calendar. Please refresh the page.</div>';
+    return;
+  }
+  const start = rangeStart > today ? rangeStart : today;
+  viewYear = start.getFullYear();
+  viewMonth = start.getMonth();
+  renderCalendar();
+}
+
+init();
+</script>
+</body>
+</html>
