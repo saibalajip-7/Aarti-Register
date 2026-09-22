@@ -606,6 +606,16 @@
     font-weight:600;
     margin:0 0 20px;
   }
+  .login-back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:13px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    margin-bottom:14px;
+  }
+  .login-back-link:hover{color:var(--accent-red);}
   .login-box label{
     display:block;
     font-size:13px;
@@ -689,6 +699,7 @@
 <body>
 <div id="loginOverlay" class="login-overlay">
   <div class="login-box">
+    <a class="login-back-link" href="index.html">&larr; Back to start page</a>
     <h2>Sign in</h2>
     <label for="loginUsername">Username</label>
     <input type="text" id="loginUsername" autocomplete="username">
@@ -2069,7 +2080,7 @@ loginUsername.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') loginPas
 
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
   clearAuthToken();
-  location.reload();
+  window.location.href = 'index.html';
 });
 
 (function startup(){
