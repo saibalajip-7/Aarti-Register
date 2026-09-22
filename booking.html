@@ -308,7 +308,7 @@
     </div>
     <div class="field">
       <label for="bkPhone">Phone number</label>
-      <input type="tel" id="bkPhone" autocomplete="tel">
+      <input type="tel" id="bkPhone" autocomplete="tel" inputmode="numeric" maxlength="10" placeholder="10-digit phone number">
     </div>
     <div class="field">
       <label for="bkLocation">Location</label>
@@ -466,6 +466,9 @@ const bookingDateLabel = document.getElementById('bookingDateLabel');
 const bkName = document.getElementById('bkName');
 const bkClass = document.getElementById('bkClass');
 const bkPhone = document.getElementById('bkPhone');
+bkPhone.addEventListener('input', ()=>{
+  bkPhone.value = bkPhone.value.replace(/\D/g, '').slice(0, 10);
+});
 const bkLocation = document.getElementById('bkLocation');
 const bookingError = document.getElementById('bookingError');
 const bookingSubmit = document.getElementById('bookingSubmit');
@@ -512,7 +515,9 @@ bookingSubmit.addEventListener('click', async ()=>{
   const location = bkLocation.value;
 
   if (!name){ bookingError.textContent = 'Please enter a name.'; return; }
+  if (!className){ bookingError.textContent = 'Please choose a class.'; return; }
   if (!phone){ bookingError.textContent = 'Please enter a phone number.'; return; }
+  if (!/^\d{10}$/.test(phone)){ bookingError.textContent = 'Phone number must be exactly 10 digits.'; return; }
   if (!location){ bookingError.textContent = 'Please choose a location.'; return; }
 
   bookingSubmit.disabled = true;
