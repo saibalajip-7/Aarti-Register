@@ -117,7 +117,8 @@ export default async function handler(req, res) {
       const { name, class: className, phone, location, date, yearLabel } = body || {};
 
       if (!name || !String(name).trim()) return res.status(400).json({ error: 'Please enter a name.' });
-      if (!phone || !String(phone).trim()) return res.status(400).json({ error: 'Please enter a phone number.' });
+      if (!className || !String(className).trim()) return res.status(400).json({ error: 'Please choose a class.' });
+      if (!phone || !/^\d{10}$/.test(String(phone).trim())) return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
       if (!LOCATIONS.includes(location)) return res.status(400).json({ error: 'Please choose a valid location.' });
       if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: 'Please choose a valid date.' });
 
